@@ -1,73 +1,114 @@
 <!DOCTYPE html>
-<html lang="es">
+
+<html class="dark" lang="es">
+
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>También era dev, eradev2.com</title>
-    
-    <!-- Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    
-    <!-- Custom Style -->
-    <link rel="stylesheet" href="style.css" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-dark": "#0a0a0a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 2s ease-out forwards',
+                        'fade-in-delayed': 'fadeIn 2s ease-out 0.5s forwards',
+                        'fade-in-late': 'fadeIn 2s ease-out 1.2s forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            min-height: 100dvh;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(19, 91, 236, 0.4);
+        }
+
+        .glow-sphere {
+            background: radial-gradient(circle, rgba(19, 91, 236, 0.08) 0%, rgba(10, 10, 10, 0) 70%);
+        }
+
+        .grain-bg {
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC3ktutUithvll6vuJtdVpjf8g36W8uTrepe8dVWC0bDHVQsyKPkjEFFEHSd8oqo2KismJmahE-9bOZtM1Z5Nk3t8UxM2T_18x3FUIK6k8XkR3A-kQO3yogcLFZbEbHpvaWbYHC9OhhVamdMW_tI337xGgyTi-BHSNy7jjkjDwjgybyvptS-GFqplkPIyNgqoOnTGNx_CyRXvcI5e2hJBfcByy4Fj4bUP2HvzdMwXqZckBY5cesD4-Oo6RvH_zEy6EJSKRBl5j-HWnM);
+            opacity: 0.02;
+        }
+    </style>
 </head>
 
-<body>
-    <!-- Background Effects -->
-    <div class="grain-bg"></div>
-    <div class="glow-sphere"></div>
-
-    <header>
-        <div class="container nav-content">
-            <div class="logo-box">
-                <span class="material-symbols-outlined" style="color: var(--primary); font-size: 1.25rem;">terminal</span>
-                <span class="logo-text">ERADEV2_LOG</span>
+<body class="bg-background-dark text-slate-400 font-display selection:bg-primary/30 antialiased overflow-x-hidden">
+    <div class="fixed inset-0 grain-bg pointer-events-none z-50"></div>
+    <div class="fixed inset-0 glow-sphere pointer-events-none"></div>
+    <header class="fixed top-0 w-full z-40 bg-background-dark/40 backdrop-blur-sm">
+        <div class="flex items-center justify-between p-6 max-w-2xl mx-auto">
+            <div class="flex items-center gap-2 opacity-60">
+                <span class="material-symbols-outlined text-primary text-xl">terminal</span>
+                <span class="font-mono text-[10px] tracking-[0.2em]">ERADEV2_LOG</span>
             </div>
-            <div class="pulse-dot"></div>
+            <div class="animate-pulse">
+                <span class="h-1.5 w-1.5 rounded-full bg-primary inline-block"></span>
+            </div>
         </div>
     </header>
-
-    <main class="container">
+    <main class="relative z-10 max-w-2xl mx-auto px-8 pt-32 pb-40 space-y-24">
         <!-- Hero Section -->
-        <section class="hero-section">
-            <h1 class="text-glow">
-                También era dev, <span class="brand-span">eradev2.com</span>
+        <section class="space-y-8 animate-fade-in">
+            <h1 class="text-4xl font-extrabold text-white tracking-tighter text-glow leading-tight">
+                También era dev, <span class="text-primary italic font-light text-5xl">eradev2.com</span>
             </h1>
-            <p class="status-label">
+            <p class="font-mono text-xs tracking-widest text-primary/60 uppercase">
                 System Status: Rebuilding
             </p>
         </section>
+        <!-- Narrative Section 01 -->
 
-        <!-- Dynamic content can go here -->
     </main>
-
-    <footer>
-        <div class="container footer-content">
-            <div class="social-links-box" style="display: flex; flex-direction: column; gap: 1rem;">
-                <div class="social-links">
-                    <a href="#" title="Data Object">
-                        <span class="material-symbols-outlined" style="font-size: 1.125rem;">data_object</span>
-                    </a>
-                    <a href="#" title="Email">
-                        <span class="material-symbols-outlined" style="font-size: 1.125rem;">alternate_email</span>
-                    </a>
-                    <a href="#" title="Link">
-                        <span class="material-symbols-outlined" style="font-size: 1.125rem;">link</span>
-                    </a>
+    <footer class="relative z-10 border-t border-white/5 py-12 px-8">
+        <div class="max-w-2xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8 opacity-40">
+            <div class="space-y-4">
+                <div class="flex gap-4">
+                    <a class="hover:text-primary transition-colors" href="#"><span
+                            class="material-symbols-outlined text-lg">data_object</span></a>
+                    <a class="hover:text-primary transition-colors" href="#"><span
+                            class="material-symbols-outlined text-lg">alternate_email</span></a>
+                    <a class="hover:text-primary transition-colors" href="#"><span
+                            class="material-symbols-outlined text-lg">link</span></a>
                 </div>
-                <p class="footer-build-info" id="build-info">
+                <p class="text-[10px] font-mono tracking-wider uppercase">
                     V2.0.0-ALPHA-BUILD // 14 MAR
                 </p>
             </div>
-            <div class="footer-brand">
+            <div class="text-[9px] font-mono text-right space-y-1">
                 <p>© 2026 ERADEV2.COM</p>
                 <p>DESARROLLO COMO ARTE.</p>
             </div>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <script src="main.js"></script>
 </body>
+
 </html>
