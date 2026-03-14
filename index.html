@@ -48,7 +48,11 @@
     <style>
         body {
             background-color: #0a0a0a;
-            min-height: 100dvh;
+            height: 100dvh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .text-glow {
@@ -63,10 +67,17 @@
             background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC3ktutUithvll6vuJtdVpjf8g36W8uTrepe8dVWC0bDHVQsyKPkjEFFEHSd8oqo2KismJmahE-9bOZtM1Z5Nk3t8UxM2T_18x3FUIK6k8XkR3A-kQO3yogcLFZbEbHpvaWbYHC9OhhVamdMW_tI337xGgyTi-BHSNy7jjkjDwjgybyvptS-GFqplkPIyNgqoOnTGNx_CyRXvcI5e2hJBfcByy4Fj4bUP2HvzdMwXqZckBY5cesD4-Oo6RvH_zEy6EJSKRBl5j-HWnM);
             opacity: 0.02;
         }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
     </style>
 </head>
 
-<body class="bg-background-dark text-slate-400 font-display selection:bg-primary/30 antialiased overflow-x-hidden">
+<body class="bg-background-dark text-slate-400 font-display selection:bg-primary/30 antialiased">
     <div class="fixed inset-0 grain-bg pointer-events-none z-50"></div>
     <div class="fixed inset-0 glow-sphere pointer-events-none"></div>
     <header class="fixed top-0 w-full z-40 bg-background-dark/40 backdrop-blur-sm">
