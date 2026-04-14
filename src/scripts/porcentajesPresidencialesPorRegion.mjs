@@ -146,8 +146,49 @@ async function main() {
     resultados,
   };
 
+  async function pushToGitHub(jsonData) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return;
+
+    try {
+      const owner = 'DeckBlank';
+      const repo = 'era-dev-2';
+      const date = new Date(jsonData.generadoEn);
+      // Format as YYYY-MM-DDTHH-mm to avoid colons in filenames
+      const dateStr = date.toISOString().replace(/:/g, '-').split('.')[0];
+      const path = `src/scripts/history/porcentajes_${dateStr}.json`;
+      
+      const content = Buffer.from(JSON.stringify(jsonData, null, 2)).toString('base64');
+      
+      console.log(`Subiendo histórico a GitHub: ${path}...`);
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Oog guardar histórico de resultados ${dateStr}`,
+          content: content
+        })
+      });
+      
+      if (res.ok) {
+        console.log(`Histórico guardado en GitHub exitosamente: ${path}`);
+      } else {
+        const errJson = await res.json();
+        console.error(`Error de GitHub API: ${errJson.message}`);
+      }
+    } catch (error) {
+      console.error(`Excepción al subir a GitHub: ${error.message}`);
+    }
+  }
+
   writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegion.json"), JSON.stringify(output, null, 2), "utf-8");
   console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
+  
+  await pushToGitHub(output);
 
   if (errores.length > 0) {
     console.log(`Errores (${errores.length}):`, errores);
