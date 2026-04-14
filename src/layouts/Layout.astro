@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
   title?: string;
@@ -8,9 +8,9 @@ interface Props {
 }
 
 const {
-  title = 'ERADEV2',
-  description = 'eradev2.com',
-  url = 'https://www.eradev2.com',
+  title = "ERADEV2",
+  description = "eradev2.com",
+  url = "https://www.eradev2.com",
 } = Astro.props;
 ---
 
@@ -18,7 +18,10 @@ const {
 <html class="dark" lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -39,15 +42,25 @@ const {
       rel="stylesheet"
     />
   </head>
-  <body class="bg-background-dark text-slate-400 font-display selection:bg-primary/30 antialiased">
+  <body
+    class="bg-background-dark text-slate-400 font-display selection:bg-primary/30 antialiased"
+  >
     <div class="fixed inset-0 grain-bg pointer-events-none z-50"></div>
     <div class="fixed inset-0 glow-sphere pointer-events-none"></div>
 
-    <header class="fixed top-0 w-full z-40 bg-background-dark/40 backdrop-blur-sm">
+    <header
+      class="fixed top-0 w-full z-40 bg-background-dark/40 backdrop-blur-sm"
+    >
       <div class="flex items-center justify-between p-6 max-w-3xl mx-auto">
-        <a href="/" class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
-          <span class="material-symbols-outlined text-primary text-xl">terminal</span>
-          <span class="font-mono text-[10px] tracking-[0.2em]">ERADEV2_LOG</span>
+        <a
+          href="/"
+          class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
+        >
+          <span class="material-symbols-outlined text-primary text-xl"
+            >terminal</span
+          >
+          <span class="font-mono text-[10px] tracking-[0.2em]">ERADEV2_LOG</span
+          >
         </a>
         <div class="animate-pulse">
           <span class="h-1.5 w-1.5 rounded-full bg-primary inline-block"></span>
@@ -55,25 +68,33 @@ const {
       </div>
     </header>
 
-    <main class="relative z-10 max-w-3xl mx-auto px-6 md:px-8 pt-24 md:pt-32 pb-40">
+    <main
+      class="relative z-10 max-w-3xl mx-auto px-6 md:px-8 pt-24 md:pt-32 pb-40"
+    >
       <slot />
     </main>
 
     <footer class="relative z-10 border-t border-white/5 py-12 px-8">
-      <div class="max-w-3xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8 opacity-40">
+      <div
+        class="max-w-3xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8 opacity-40"
+      >
         <div class="space-y-4">
           <div class="flex gap-4">
             <a class="hover:text-primary transition-colors" href="#">
               <span class="material-symbols-outlined text-lg">data_object</span>
             </a>
             <a class="hover:text-primary transition-colors" href="#">
-              <span class="material-symbols-outlined text-lg">alternate_email</span>
+              <span class="material-symbols-outlined text-lg"
+                >alternate_email</span
+              >
             </a>
             <a class="hover:text-primary transition-colors" href="#">
               <span class="material-symbols-outlined text-lg">link</span>
             </a>
           </div>
-          <p class="text-[10px] font-mono tracking-wider uppercase">V2.0.0-ALPHA-BUILD // 14 MAR</p>
+          <p class="text-[10px] font-mono tracking-wider uppercase">
+            V2.0.0-ALPHA-BUILD // 14 MAR
+          </p>
         </div>
         <div class="text-[9px] font-mono text-right space-y-1">
           <p>© 2026 ERADEV2.COM</p>
