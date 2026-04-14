@@ -71,7 +71,7 @@ function formatOption(filename) {
                   id="diffActas"
                   class="comparar-data font-medium text-xs font-extra-bold text-green-700 dark:text-green-400 ml-2 shadow-sm bg-green-100 dark:bg-green-900/40 px-2 py-0.5 rounded border border-green-300 dark:border-green-700/50"
                   style="display: none;"
-                ></span>
+                />
               </div>
 
               <div class="mt-4 mb-6">
@@ -145,7 +145,7 @@ function formatOption(filename) {
                       class="comparar-data candidato-diff flex flex-col items-end mt-1 p-1 px-1.5 bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded animate-fade-in origin-top"
                       style="display: none;"
                       data-candidato-diff={c.nombreCandidato}
-                    ></div>
+                    />
                   </div>
                 </div>
               ))}
@@ -228,7 +228,7 @@ function formatOption(filename) {
                     class="comparar-data region-diff font-mono text-[10px] font-bold tabular-nums whitespace-nowrap"
                     style="display: none;"
                     data-region-diff={r.nombre}
-                  ></span>
+                  />
                 </div>
               </td>
               <td class="hidden sm:table-cell px-4 py-3 text-right font-mono text-slate-600 dark:text-slate-400">
@@ -247,22 +247,45 @@ function formatOption(filename) {
   <!-- Proyección de resultados -->
   <section id="proyeccionSection" class="space-y-4 mt-8">
     <div class="flex items-center gap-3">
-      <h2 class="text-lg font-extrabold text-slate-900 dark:text-white tracking-tighter">
+      <h2
+        class="text-lg font-extrabold text-slate-900 dark:text-white tracking-tighter"
+      >
         Proyección Final
       </h2>
-      <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded">
+      <span
+        class="text-[10px] font-mono uppercase tracking-widest text-slate-400 bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded"
+      >
         Regresión lineal
       </span>
     </div>
     <p class="text-xs text-slate-500 dark:text-slate-400 -mt-2">
-      Estimación basada en la tendencia histórica de cada candidato conforme avanza el conteo de actas.
+      Estimación basada en la tendencia histórica de cada candidato conforme
+      avanza el conteo de actas.
     </p>
 
-    <div id="proyeccionLoading" class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-6 text-center">
+    <div
+      id="proyeccionLoading"
+      class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-6 text-center"
+    >
       <div class="inline-flex items-center gap-2 text-xs text-slate-500">
-        <svg class="animate-spin h-4 w-4 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        <svg
+          class="animate-spin h-4 w-4 text-primary"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
         </svg>
         Cargando datos históricos para proyección…
       </div>
@@ -270,30 +293,57 @@ function formatOption(filename) {
 
     <div id="proyeccionContent" style="display: none;">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group">
-          <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          <p class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4">
+        <div
+          class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group"
+        >
+          <div
+            class="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          >
+          </div>
+          <p
+            class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4"
+          >
             Proyección al 100% de actas
           </p>
           <div id="proyeccionCandidatos" class="space-y-4"></div>
         </div>
 
-        <div class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group">
-          <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          <p class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4">
+        <div
+          class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group"
+        >
+          <div
+            class="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          >
+          </div>
+          <p
+            class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4"
+          >
             Datos de la proyección
           </p>
-          <div id="proyeccionMeta" class="space-y-2 text-xs text-slate-600 dark:text-slate-400"></div>
+          <div
+            id="proyeccionMeta"
+            class="space-y-2 text-xs text-slate-600 dark:text-slate-400"
+          >
+          </div>
         </div>
       </div>
     </div>
 
-    <div id="proyeccionError" style="display: none;" class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30 rounded-xl p-4 text-xs text-red-700 dark:text-red-400">
+    <div
+      id="proyeccionError"
+      style="display: none;"
+      class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30 rounded-xl p-4 text-xs text-red-700 dark:text-red-400"
+    >
     </div>
   </section>
 </div>
 
-<script define:vars={{ datosActualesJSON: JSON.stringify(datos), archivosHistoricoJSON: JSON.stringify(archivosHistorico) }}>
+<script
+  define:vars={{
+    datosActualesJSON: JSON.stringify(datos),
+    archivosHistoricoJSON: JSON.stringify(archivosHistorico),
+  }}
+>
   window.__datosActuales = JSON.parse(datosActualesJSON);
   window.__archivosHistorico = JSON.parse(archivosHistoricoJSON);
 </script>
@@ -455,7 +505,8 @@ function formatOption(filename) {
           rHist.porcentajeActasContabilizadas
         ).toFixed(3);
         const numPct = parseFloat(diffPct);
-        const diffActas = rActual.actasContabilizadas - rHist.actasContabilizadas;
+        const diffActas =
+          rActual.actasContabilizadas - rHist.actasContabilizadas;
 
         if (numPct === 0 && diffActas === 0) return;
 
@@ -583,7 +634,10 @@ function formatOption(filename) {
     const n = points.length;
     if (n < 2) return null;
 
-    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+    let sumX = 0,
+      sumY = 0,
+      sumXY = 0,
+      sumX2 = 0;
     for (const p of points) {
       sumX += p.x;
       sumY += p.y;
@@ -599,7 +653,8 @@ function formatOption(filename) {
 
     // R²
     const meanY = sumY / n;
-    let ssTot = 0, ssRes = 0;
+    let ssTot = 0,
+      ssRes = 0;
     for (const p of points) {
       ssTot += (p.y - meanY) ** 2;
       ssRes += (p.y - (slope * p.x + intercept)) ** 2;
@@ -614,7 +669,9 @@ function formatOption(filename) {
       const filesToFetch = archivosHistorico.slice(0, 15);
 
       if (filesToFetch.length < 2) {
-        showProjectionError("Se necesitan al menos 2 snapshots históricos para proyectar.");
+        showProjectionError(
+          "Se necesitan al menos 2 snapshots históricos para proyectar.",
+        );
         return;
       }
 
@@ -623,13 +680,19 @@ function formatOption(filename) {
           const res = await fetch(`/history/${f}`);
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return await res.json();
-        })
+        }),
       );
 
       const snapshots = results
-        .filter((r): r is PromiseFulfilledResult<any> => r.status === "fulfilled")
+        .filter(
+          (r): r is PromiseFulfilledResult<any> => r.status === "fulfilled",
+        )
         .map((r) => r.value)
-        .filter((d: any) => d.resumenNacional?.top4Candidatos && d.resumenNacional.actasContabilizadas);
+        .filter(
+          (d: any) =>
+            d.resumenNacional?.top4Candidatos &&
+            d.resumenNacional.actasContabilizadas,
+        );
 
       // Agregar datos actuales
       if (datosActuales.resumenNacional?.top4Candidatos) {
@@ -637,7 +700,9 @@ function formatOption(filename) {
       }
 
       if (snapshots.length < 3) {
-        showProjectionError("Datos insuficientes para una proyección confiable.");
+        showProjectionError(
+          "Datos insuficientes para una proyección confiable.",
+        );
         return;
       }
 
@@ -662,7 +727,7 @@ function formatOption(filename) {
           if (!timeline) continue;
 
           const exists = timeline.puntos.some(
-            (p: DataPoint) => Math.abs(p.actasPct - actasPct) < 0.001
+            (p: DataPoint) => Math.abs(p.actasPct - actasPct) < 0.001,
           );
           if (!exists) {
             timeline.puntos.push({
@@ -679,9 +744,14 @@ function formatOption(filename) {
 
       for (const [nombre, timeline] of candidatoMap) {
         if (timeline.puntos.length < 2) continue;
-        timeline.puntos.sort((a: DataPoint, b: DataPoint) => a.actasPct - b.actasPct);
+        timeline.puntos.sort(
+          (a: DataPoint, b: DataPoint) => a.actasPct - b.actasPct,
+        );
 
-        const points = timeline.puntos.map((p: DataPoint) => ({ x: p.actasPct, y: p.candidatoPct }));
+        const points = timeline.puntos.map((p: DataPoint) => ({
+          x: p.actasPct,
+          y: p.candidatoPct,
+        }));
         const reg = linearRegression(points);
         if (!reg) continue;
 
@@ -705,8 +775,12 @@ function formatOption(filename) {
       }
 
       // Rankings
-      [...proyecciones].sort((a, b) => b.actual - a.actual).forEach((p, i) => (p.rankActual = i + 1));
-      const sortedProy = [...proyecciones].sort((a, b) => b.proyectado - a.proyectado);
+      [...proyecciones]
+        .sort((a, b) => b.actual - a.actual)
+        .forEach((p, i) => (p.rankActual = i + 1));
+      const sortedProy = [...proyecciones].sort(
+        (a, b) => b.proyectado - a.proyectado,
+      );
       sortedProy.forEach((p, i) => (p.rankProyectado = i + 1));
 
       renderProjection(sortedProy, snapshots.length);
@@ -751,8 +825,10 @@ function formatOption(filename) {
         const diff = p.proyectado - p.actual;
         const diffStr = diff > 0 ? `+${diff.toFixed(3)}` : diff.toFixed(3);
         const diffColor =
-          diff > 0 ? "text-green-700 dark:text-green-400"
-            : diff < 0 ? "text-red-700 dark:text-red-400"
+          diff > 0
+            ? "text-green-700 dark:text-green-400"
+            : diff < 0
+              ? "text-red-700 dark:text-red-400"
               : "text-slate-500";
 
         const barWidth = maxProy > 0 ? (p.proyectado / maxProy) * 100 : 0;
@@ -796,7 +872,10 @@ function formatOption(filename) {
 
     // Meta info
     const actasPct = datosActuales.resumenNacional?.actasContabilizadas ?? "?";
-    const totalPuntos = proyecciones.reduce((s: number, p: any) => s + p.puntos, 0);
+    const totalPuntos = proyecciones.reduce(
+      (s: number, p: any) => s + p.puntos,
+      0,
+    );
 
     metaEl.innerHTML = `
       <div class="space-y-3">
