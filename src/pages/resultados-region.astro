@@ -1,0 +1,144 @@
+---
+import Layout from '../layouts/Layout.astro';
+import datos from '../scripts/porcentajesPresidencialesPorRegion.json';
+
+const { resultados, generadoEn, totalRegiones } = datos;
+const fecha = new Date(generadoEn).toLocaleString('es-PE', {
+  timeZone: 'America/Lima',
+  dateStyle: 'medium',
+  timeStyle: 'short',
+});
+---
+
+<Layout title="Resultados por Región — ERADEV2">
+  <div class="space-y-8 animate-fade-in">
+
+    <section class="space-y-2">
+      <p class="font-mono text-xs tracking-widest text-primary/60 uppercase">Elecciones 2026 // Presidencial</p>
+      <h1 class="text-2xl font-extrabold text-white tracking-tighter">
+        Actas por Región
+      </h1>
+      <p class="font-mono text-[10px] text-slate-500">
+        {totalRegiones} regiones · Actualizado: {fecha} (Lima)
+      </p>
+    </section>
+
+    <div class="overflow-x-auto rounded-lg border border-white/5">
+      <table id="tabla" class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-white/10 bg-white/5">
+            <th data-col="nombre" class="th-sort px-4 py-3 text-left font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+              Región <span class="sort-icon ml-1 opacity-40">↕</span>
+            </th>
+            <th data-col="actasContabilizadas" class="th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+              Actas ✓ <span class="sort-icon ml-1 opacity-40">↕</span>
+            </th>
+            <th data-col="porcentajeActasContabilizadas" class="th-sort px-4 py-3 text-left font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+              % Contabilizadas <span class="sort-icon ml-1 opacity-40">↕</span>
+            </th>
+            <th data-col="actasPendientes" class="th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+              Actas ✗ <span class="sort-icon ml-1 opacity-40">↕</span>
+            </th>
+            <th data-col="porcentajeActasPendientes" class="th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+              % Pendientes <span class="sort-icon ml-1 opacity-40">↕</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          {resultados.map((r, i) => (
+            <tr
+              class="border-b border-white/5 hover:bg-white/[0.03] transition-colors"
+              data-nombre={r.nombre}
+              data-actas-contabilizadas={r.actasContabilizadas}
+              data-pct-contabilizadas={r.porcentajeActasContabilizadas}
+              data-actas-pendientes={r.actasPendientes}
+              data-pct-pendientes={r.porcentajeActasPendientes}
+            >
+              <td class="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">{r.nombre}</td>
+              <td class="px-4 py-3 text-right font-mono text-slate-400">{r.actasContabilizadas.toLocaleString()}</td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3 min-w-[160px]">
+                  <div class="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-primary rounded-full"
+                      style={`width: ${r.porcentajeActasContabilizadas}%`}
+                    />
+                  </div>
+                  <span class="font-mono text-xs text-slate-300 w-12 text-right shrink-0">
+                    {r.porcentajeActasContabilizadas.toFixed(1)}%
+                  </span>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-right font-mono text-slate-400">{r.actasPendientes.toLocaleString()}</td>
+              <td class="px-4 py-3 text-right font-mono text-slate-500">{r.porcentajeActasPendientes.toFixed(1)}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</Layout>
+
+<script>
+  type SortDir = 'asc' | 'desc';
+  type ColKey = 'nombre' | 'actasContabilizadas' | 'porcentajeActasContabilizadas' | 'actasPendientes' | 'porcentajeActasPendientes';
+
+  const dataAttr: Record<ColKey, string> = {
+    nombre: 'nombre',
+    actasContabilizadas: 'actasContabilizadas',
+    porcentajeActasContabilizadas: 'pctContabilizadas',
+    actasPendientes: 'actasPendientes',
+    porcentajeActasPendientes: 'pctPendientes',
+  };
+
+  let currentCol: ColKey | null = null;
+  let currentDir: SortDir = 'desc';
+
+  const tbody = document.getElementById('tbody')!;
+  const headers = document.querySelectorAll<HTMLTableCellElement>('.th-sort');
+
+  headers.forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col as ColKey;
+      if (currentCol === col) {
+        currentDir = currentDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentCol = col;
+        currentDir = col === 'nombre' ? 'asc' : 'desc';
+      }
+      sortTable(col, currentDir);
+      updateIcons(th, currentDir);
+    });
+  });
+
+  function sortTable(col: ColKey, dir: SortDir) {
+    const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>('tr'));
+    const attr = dataAttr[col];
+
+    rows.sort((a, b) => {
+      const av = a.dataset[attr] ?? '';
+      const bv = b.dataset[attr] ?? '';
+      const isNum = col !== 'nombre';
+      const cmp = isNum ? parseFloat(av) - parseFloat(bv) : av.localeCompare(bv, 'es');
+      return dir === 'asc' ? cmp : -cmp;
+    });
+
+    rows.forEach(r => tbody.appendChild(r));
+  }
+
+  function updateIcons(active: HTMLTableCellElement, dir: SortDir) {
+    headers.forEach(th => {
+      const icon = th.querySelector('.sort-icon')!;
+      if (th === active) {
+        icon.textContent = dir === 'asc' ? '↑' : '↓';
+        icon.classList.remove('opacity-40');
+        icon.classList.add('text-primary');
+      } else {
+        icon.textContent = '↕';
+        icon.classList.add('opacity-40');
+        icon.classList.remove('text-primary');
+      }
+    });
+  }
+</script>
