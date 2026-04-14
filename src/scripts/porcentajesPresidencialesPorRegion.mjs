@@ -171,7 +171,7 @@ async function main() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          message: `Oog guardar histórico de resultados ${dateStr}`,
+          message: `Oog guardar histórico de resultados ${dateStr} [skip ci]`,
           content: content
         })
       });
@@ -190,7 +190,7 @@ async function main() {
   writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegion.json"), JSON.stringify(output, null, 2), "utf-8");
   console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
 
-  // await pushToGitHub(output);
+  await pushToGitHub(output);
 
   if (errores.length > 0) {
     console.log(`Errores (${errores.length}):`, errores);
