@@ -1,13 +1,10 @@
 ---
 export interface Props {
   datos: any;
-  datosActuales?: any;
   archivosHistorico: string[];
-  archivoActual: string;
 }
 
-const { datos, datosActuales, archivosHistorico, archivoActual } = Astro.props;
-console.log({ datos, datosActuales, archivosHistorico, archivoActual });
+const { datos, archivosHistorico } = Astro.props;
 
 const { resultados, generadoEn, totalRegiones } = datos;
 const fecha = new Date(generadoEn).toLocaleString("es-PE", {
@@ -17,14 +14,12 @@ const fecha = new Date(generadoEn).toLocaleString("es-PE", {
 });
 
 function formatOption(filename) {
-  if (filename === "current") return "Último reporte (Actual)";
   const match = filename.match(/porcentajes_(.+)\.json/);
   if (match) {
     let datePart = match[1];
     let parts = datePart.split("T");
     if (parts.length === 2) {
       let timeParts = parts[1].split("-");
-      // Reconstruct valid ISO string to parse. E.g. "2026-04-14T15:11:52Z"
       let iso = `${parts[0]}T${timeParts.join(":")}Z`;
       return new Date(iso).toLocaleString("es-PE", {
         timeZone: "America/Lima",
@@ -72,22 +67,11 @@ function formatOption(filename) {
                 <span class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">
                   {datos.resumenNacional.actasContabilizadas}%
                 </span>
-                {archivoActual !== "current" &&
-                  datosActuales?.resumenNacional && (
-                    <span
-                      class="comparar-data font-medium text-xs font-extra-bold text-green-700 dark:text-green-400 ml-2 shadow-sm bg-green-100 dark:bg-green-900/40 px-2 py-0.5 rounded border border-green-300 dark:border-green-700/50"
-                      style="display: none;"
-                    >
-                      ↑ +
-                      {(
-                        parseFloat(
-                          datosActuales.resumenNacional.actasContabilizadas,
-                        ) -
-                        parseFloat(datos.resumenNacional.actasContabilizadas)
-                      ).toFixed(3)}
-                      %
-                    </span>
-                  )}
+                <span
+                  id="diffActas"
+                  class="comparar-data font-medium text-xs font-extra-bold text-green-700 dark:text-green-400 ml-2 shadow-sm bg-green-100 dark:bg-green-900/40 px-2 py-0.5 rounded border border-green-300 dark:border-green-700/50"
+                  style="display: none;"
+                ></span>
               </div>
 
               <div class="mt-4 mb-6">
@@ -105,21 +89,23 @@ function formatOption(filename) {
                 for="historialSelect"
                 class="block font-medium text-[10px] uppercase text-slate-500 tracking-wider mb-2"
               >
-                Revisar reporte histórico:
+                Comparar con histórico:
               </label>
               <select
                 id="historialSelect"
                 class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-xs font-medium focus:ring-1 focus:ring-primary outline-none transition-colors dark:text-white shadow-sm cursor-pointer"
               >
-                <option value="current" selected={archivoActual === "current"}>
-                  Último reporte (Actual)
+                <option value="" selected>
+                  Sin comparación
                 </option>
                 {archivosHistorico.map((f) => (
-                  <option value={f} selected={archivoActual === f}>
-                    {formatOption(f)}
-                  </option>
+                  <option value={f}>{formatOption(f)}</option>
                 ))}
               </select>
+              <p
+                id="comparacionStatus"
+                class="text-[10px] text-slate-400 mt-1.5 h-4"
+              />
             </div>
           </div>
 
@@ -130,83 +116,39 @@ function formatOption(filename) {
                 Top 4 Candidatos (Votos Válidos)
               </p>
             </div>
-            <div class="space-y-3">
-              {datos.resumenNacional.top4Candidatos.map((c, i) => {
-                let matchCurrent = null;
-                if (
-                  archivoActual !== "current" &&
-                  datosActuales?.resumenNacional?.top4Candidatos
-                ) {
-                  matchCurrent =
-                    datosActuales.resumenNacional.top4Candidatos.find(
-                      (ac) => ac.nombreCandidato === c.nombreCandidato,
-                    );
-                }
-
-                let diffPct = 0;
-                let diffVotos = 0;
-                if (matchCurrent) {
-                  diffPct = (
-                    parseFloat(matchCurrent.porcentajeVotosValidos) -
-                    parseFloat(c.porcentajeVotosValidos)
-                  ).toFixed(3);
-                  diffVotos =
-                    matchCurrent.totalVotosValidos - c.totalVotosValidos;
-                }
-
-                return (
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                      <span class="flex items-center justify-center w-5 h-5 rounded-full bg-black/10 dark:bg-white/10 text-xs font-bold text-slate-700 dark:text-slate-300">
-                        {i + 1}
-                      </span>
-                      <span
-                        class="text-sm font-medium text-slate-800 dark:text-slate-200 capitalize leading-tight"
-                        style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"
-                        title={c.nombreCandidato}
-                      >
-                        {c.nombreCandidato.toLowerCase()}
-                      </span>
-                    </div>
-                    <div class="flex flex-col items-end">
-                      <span class="font-medium text-xs font-bold text-primary tabular-nums">
-                        {c.porcentajeVotosValidos}%
-                      </span>
-                      <span class="font-medium text-[9px] text-slate-600 dark:text-slate-500 tabular-nums tracking-tighter">
-                        {c.totalVotosValidos.toLocaleString("es-PE")} votos
-                      </span>
-                      {matchCurrent && (
-                        <div
-                          class="comparar-data flex flex-col items-end mt-1 p-1 px-1.5 bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded animate-fade-in origin-top"
-                          style="display: none;"
-                        >
-                          <span
-                            class={`font-medium text-[10px] font-bold tabular-nums ${diffPct > 0 ? "text-green-700 dark:text-green-400" : diffPct < 0 ? "text-red-700 dark:text-red-400" : "text-slate-600 dark:text-slate-400"}`}
-                          >
-                            {diffPct > 0 ? "↑ +" : diffPct < 0 ? "↓ " : ""}
-                            {diffPct !== 0 ? diffPct : "0"}%
-                          </span>
-                          <span
-                            class={`font-medium text-[9px] font-medium tabular-nums ${diffVotos > 0 ? "text-green-700 dark:text-green-500" : diffVotos < 0 ? "text-red-700 dark:text-red-500" : "text-slate-500 dark:text-slate-400"}`}
-                          >
-                            {diffVotos > 0 ? "+" : ""}
-                            {diffVotos.toLocaleString("es-PE")} votos
-                          </span>
-                        </div>
-                      )}
-                    </div>
+            <div id="top4Container" class="space-y-3">
+              {datos.resumenNacional.top4Candidatos.map((c, i) => (
+                <div
+                  class="flex items-center justify-between"
+                  data-candidato={c.nombreCandidato}
+                >
+                  <div class="flex items-center gap-3">
+                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-black/10 dark:bg-white/10 text-xs font-bold text-slate-700 dark:text-slate-300">
+                      {i + 1}
+                    </span>
+                    <span
+                      class="text-sm font-medium text-slate-800 dark:text-slate-200 capitalize leading-tight"
+                      style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"
+                      title={c.nombreCandidato}
+                    >
+                      {c.nombreCandidato.toLowerCase()}
+                    </span>
                   </div>
-                );
-              })}
-              {archivoActual !== "current" &&
-                datosActuales?.resumenNacional && (
-                  <button
-                    id="btnComparar"
-                    class="w-full mt-2 text-[10px] uppercase tracking-wide bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition-colors shadow focus:ring-2 focus:ring-blue-400 outline-none"
-                  >
-                    Comparar con Actual
-                  </button>
-                )}
+                  <div class="flex flex-col items-end">
+                    <span class="font-medium text-xs font-bold text-primary tabular-nums">
+                      {c.porcentajeVotosValidos}%
+                    </span>
+                    <span class="font-medium text-[9px] text-slate-600 dark:text-slate-500 tabular-nums tracking-tighter">
+                      {c.totalVotosValidos.toLocaleString("es-PE")} votos
+                    </span>
+                    <div
+                      class="comparar-data candidato-diff flex flex-col items-end mt-1 p-1 px-1.5 bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded animate-fade-in origin-top"
+                      style="display: none;"
+                      data-candidato-diff={c.nombreCandidato}
+                    ></div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -298,40 +240,151 @@ function formatOption(filename) {
   </div>
 </div>
 
-<script>
-  document.addEventListener("click", (e) => {
-    const target = e.target as HTMLElement;
-    const btn = target.closest("#btnComparar") as HTMLButtonElement | null;
-    
-    if (btn) {
-      let isShowing = false;
-      document.querySelectorAll<HTMLElement>(".comparar-data").forEach((el) => {
-        if (el.style.display === "none") {
-          el.style.display = ""; // Defaults back to tailwind css class display
-          isShowing = true;
-        } else {
-          el.style.display = "none";
-        }
-      });
-      
-      btn.textContent = isShowing ? "Ocultar comparación" : "Comparar con Actual";
-    }
-  });
+<script define:vars={{ datosActualesJSON: JSON.stringify(datos) }}>
+  // Current data embedded for diff calculations
+  window.__datosActuales = JSON.parse(datosActualesJSON);
+</script>
 
-  // Handle select navigation
-  document
-    .getElementById("historialSelect")
-    ?.addEventListener("change", (e) => {
-      const val = (e.target as HTMLSelectElement).value;
-      if (val === "current") {
-        window.location.href = "/resultados-region";
-      } else {
-        // Remove .json for the route
-        const name = val.replace(".json", "");
-        window.location.href = "/resultados-region/historico/" + name;
+<script>
+  const datosActuales = (window as any).__datosActuales;
+
+  // ── Comparison logic ──
+  const select = document.getElementById(
+    "historialSelect",
+  ) as HTMLSelectElement;
+  const statusEl = document.getElementById("comparacionStatus");
+
+  if (select) {
+    select.addEventListener("change", async () => {
+      const filename = select.value;
+
+      // Clear comparison
+      hideComparison();
+
+      if (!filename) {
+        if (statusEl) statusEl.textContent = "";
+        return;
+      }
+
+      if (statusEl) statusEl.textContent = "Cargando histórico…";
+
+      try {
+        const res = await fetch(`/history/${filename}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const datosHistoricos = await res.json();
+
+        showComparison(datosHistoricos);
+        if (statusEl) {
+          const fechaHist = new Date(datosHistoricos.generadoEn).toLocaleString(
+            "es-PE",
+            {
+              timeZone: "America/Lima",
+              dateStyle: "medium",
+              timeStyle: "short",
+            },
+          );
+          statusEl.textContent = `Comparando con snapshot de ${fechaHist}`;
+        }
+      } catch (err) {
+        console.error("Error cargando histórico:", err);
+        if (statusEl) statusEl.textContent = "Error al cargar histórico.";
       }
     });
+  }
 
+  function hideComparison() {
+    document.querySelectorAll<HTMLElement>(".comparar-data").forEach((el) => {
+      el.style.display = "none";
+      el.innerHTML = "";
+    });
+  }
+
+  function showComparison(datosHistoricos: any) {
+    // ── Diff actas contabilizadas nacionales ──
+    const diffActasEl = document.getElementById("diffActas");
+    if (
+      diffActasEl &&
+      datosActuales.resumenNacional &&
+      datosHistoricos.resumenNacional
+    ) {
+      const diffPct = (
+        parseFloat(datosActuales.resumenNacional.actasContabilizadas) -
+        parseFloat(datosHistoricos.resumenNacional.actasContabilizadas)
+      ).toFixed(3);
+      const num = parseFloat(diffPct);
+
+      diffActasEl.style.display = "";
+      if (num > 0) {
+        diffActasEl.textContent = `↑ +${diffPct}%`;
+        diffActasEl.className =
+          "comparar-data font-medium text-xs font-extra-bold text-green-700 dark:text-green-400 ml-2 shadow-sm bg-green-100 dark:bg-green-900/40 px-2 py-0.5 rounded border border-green-300 dark:border-green-700/50";
+      } else if (num < 0) {
+        diffActasEl.textContent = `↓ ${diffPct}%`;
+        diffActasEl.className =
+          "comparar-data font-medium text-xs font-extra-bold text-red-700 dark:text-red-400 ml-2 shadow-sm bg-red-100 dark:bg-red-900/40 px-2 py-0.5 rounded border border-red-300 dark:border-red-700/50";
+      } else {
+        diffActasEl.textContent = `= 0%`;
+        diffActasEl.className =
+          "comparar-data font-medium text-xs font-extra-bold text-slate-600 dark:text-slate-400 ml-2 shadow-sm bg-slate-100 dark:bg-slate-900/40 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700/50";
+      }
+    }
+
+    // ── Diff candidatos ──
+    if (
+      datosActuales.resumenNacional?.top4Candidatos &&
+      datosHistoricos.resumenNacional?.top4Candidatos
+    ) {
+      datosActuales.resumenNacional.top4Candidatos.forEach((cActual: any) => {
+        const cHistorico = datosHistoricos.resumenNacional.top4Candidatos.find(
+          (h: any) => h.nombreCandidato === cActual.nombreCandidato,
+        );
+
+        if (!cHistorico) return;
+
+        const diffEl = document.querySelector<HTMLElement>(
+          `[data-candidato-diff="${cActual.nombreCandidato}"]`,
+        );
+        if (!diffEl) return;
+
+        const diffPct = (
+          parseFloat(cActual.porcentajeVotosValidos) -
+          parseFloat(cHistorico.porcentajeVotosValidos)
+        ).toFixed(3);
+        const diffVotos =
+          cActual.totalVotosValidos - cHistorico.totalVotosValidos;
+        const numPct = parseFloat(diffPct);
+
+        const pctColor =
+          numPct > 0
+            ? "text-green-700 dark:text-green-400"
+            : numPct < 0
+              ? "text-red-700 dark:text-red-400"
+              : "text-slate-600 dark:text-slate-400";
+
+        const votosColor =
+          diffVotos > 0
+            ? "text-green-700 dark:text-green-500"
+            : diffVotos < 0
+              ? "text-red-700 dark:text-red-500"
+              : "text-slate-500 dark:text-slate-400";
+
+        const pctArrow = numPct > 0 ? "↑ +" : numPct < 0 ? "↓ " : "";
+        const votosPrefix = diffVotos > 0 ? "+" : "";
+
+        diffEl.innerHTML = `
+          <span class="font-medium text-[10px] font-bold tabular-nums ${pctColor}">
+            ${pctArrow}${numPct !== 0 ? diffPct : "0"}%
+          </span>
+          <span class="font-medium text-[9px] font-medium tabular-nums ${votosColor}">
+            ${votosPrefix}${diffVotos.toLocaleString("es-PE")} votos
+          </span>
+        `;
+        diffEl.style.display = "";
+      });
+    }
+  }
+
+  // ── Table sorting ──
   type SortDir = "asc" | "desc";
   type ColKey =
     | "nombre"

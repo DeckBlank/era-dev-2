@@ -1,4 +1,4 @@
-import { writeFileSync, existsSync, readdirSync } from "fs";
+import { writeFileSync, existsSync, readdirSync, mkdirSync, copyFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { exit } from "process";
@@ -220,6 +220,19 @@ async function main() {
   console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
 
   await pushToGitHub(output);
+
+  // Copy history files to public/history/ for client-side fetch access
+  const historyDir = join(__dirname, "history");
+  const publicHistoryDir = join(__dirname, "../../public/history");
+  mkdirSync(publicHistoryDir, { recursive: true });
+
+  if (existsSync(historyDir)) {
+    const histFiles = readdirSync(historyDir).filter(f => f.endsWith(".json"));
+    for (const f of histFiles) {
+      copyFileSync(join(historyDir, f), join(publicHistoryDir, f));
+    }
+    console.log(`📁 Copiados ${histFiles.length} archivos históricos a public/history/`);
+  }
 
   if (errores.length > 0) {
     console.log(`Errores (${errores.length}):`, errores);

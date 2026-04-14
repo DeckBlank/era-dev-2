@@ -11,8 +11,6 @@ export async function getStaticPaths() {
   }
   
   const files = fs.readdirSync(historyDir).filter(f => f.endsWith(".json"));
-  
-  // Sort descending by date (assuming name formatting follows date)
   files.sort().reverse();
 
   return files.map((filename) => {
@@ -28,14 +26,13 @@ export async function getStaticPaths() {
 
 const { filename, archivosHistorico } = Astro.props;
 
-// Load the JSON directly via FS reading
+// Load current data as the primary display
 import { readFileSync } from "node:fs";
-const historyDir = path.join(process.cwd(), "src/scripts/history");
-const filePath = path.join(historyDir, filename);
+const currentPath = path.join(process.cwd(), "src/scripts/porcentajesPresidencialesPorRegion.json");
 
 let datos;
 try {
-  const content = readFileSync(filePath, "utf-8");
+  const content = readFileSync(currentPath, "utf-8");
   datos = JSON.parse(content);
 } catch (e) {
   datos = {
@@ -44,17 +41,6 @@ try {
     totalRegiones: 0,
     resumenNacional: { actasContabilizadas: 0, top4Candidatos: [] }
   };
-}
-
-let datosActuales = null;
-try {
-  const currentPath = path.join(process.cwd(), "src/scripts/porcentajesPresidencialesPorRegion.json");
-  if (fs.existsSync(currentPath)) {
-    const contentActual = readFileSync(currentPath, "utf-8");
-    datosActuales = JSON.parse(contentActual);
-  }
-} catch (e) {
-  console.error("No se pudo cargar datos actuales", e);
 }
 
 const { resultados, generadoEn } = datos;
@@ -68,18 +54,33 @@ const top4 = resultados
   .slice(0, 4)
   .map((r) => `${r.nombre} ${r.porcentajeActasContabilizadas}%`)
   .join(" · ");
-const ogDescription = `Elecciones 2026 Histórico — Actas por región. ${top4}. Actualizado: ${fecha} (Lima).`;
+const ogDescription = `Elecciones 2026 — Actas por región. ${top4}. Actualizado: ${fecha} (Lima).`;
 ---
 
 <Layout
-  title={`Histórico: ${fecha} - Elecciones 2026`}
+  title={`Elecciones 2026 — Resultados por Región`}
   description={ogDescription}
   url={`https://www.eradev2.com/resultados-region/historico/${filename.replace('.json', '')}`}
 >
   <ResultadosUI 
     datos={datos} 
-    datosActuales={datosActuales}
     archivosHistorico={archivosHistorico} 
-    archivoActual={filename} 
   />
 </Layout>
+
+<script define:vars={{ preselect: filename }}>
+  // Auto-select the historical file in the dropdown on load
+  window.__preselectHistorico = preselect;
+</script>
+
+<script>
+  // Pre-select the historical dropdown so comparison loads automatically
+  const preselect = (window as any).__preselectHistorico;
+  if (preselect) {
+    const select = document.getElementById("historialSelect") as HTMLSelectElement;
+    if (select) {
+      select.value = preselect;
+      select.dispatchEvent(new Event("change"));
+    }
+  }
+</script>
