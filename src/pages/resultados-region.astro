@@ -8,9 +8,18 @@ const fecha = new Date(generadoEn).toLocaleString('es-PE', {
   dateStyle: 'medium',
   timeStyle: 'short',
 });
+
+const top3 = resultados.slice(0, 3)
+  .map(r => `${r.nombre} ${r.porcentajeActasContabilizadas.toFixed(1)}%`)
+  .join(' · ');
+const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${top3}. Actualizado: ${fecha} (Lima).`;
 ---
 
-<Layout title="Resultados por Región — ERADEV2">
+<Layout
+  title="Actas por Región — Elecciones 2026"
+  description={ogDescription}
+  url="https://www.eradev2.com/resultados-region"
+>
   <div class="space-y-8 animate-fade-in">
 
     <section class="space-y-2">

@@ -3,9 +3,15 @@ import '../styles/global.css';
 
 interface Props {
   title?: string;
+  description?: string;
+  url?: string;
 }
 
-const { title = 'ERADEV2' } = Astro.props;
+const {
+  title = 'ERADEV2',
+  description = 'eradev2.com',
+  url = 'https://www.eradev2.com',
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -15,6 +21,15 @@ const { title = 'ERADEV2' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="ERADEV2" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
