@@ -46,6 +46,17 @@ try {
   };
 }
 
+let datosActuales = null;
+try {
+  const currentPath = path.join(process.cwd(), "src/scripts/porcentajesPresidencialesPorRegion.json");
+  if (fs.existsSync(currentPath)) {
+    const contentActual = readFileSync(currentPath, "utf-8");
+    datosActuales = JSON.parse(contentActual);
+  }
+} catch (e) {
+  console.error("No se pudo cargar datos actuales", e);
+}
+
 const { resultados, generadoEn } = datos;
 const fecha = new Date(generadoEn).toLocaleString("es-PE", {
   timeZone: "America/Lima",
@@ -67,6 +78,7 @@ const ogDescription = `Elecciones 2026 Histórico — Actas por región. ${top4}
 >
   <ResultadosUI 
     datos={datos} 
+    datosActuales={datosActuales}
     archivosHistorico={archivosHistorico} 
     archivoActual={filename} 
   />

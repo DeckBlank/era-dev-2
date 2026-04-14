@@ -1,11 +1,14 @@
 ---
 export interface Props {
   datos: any;
+  datosActuales?: any;
   archivosHistorico: string[];
   archivoActual: string;
 }
 
-const { datos, archivosHistorico, archivoActual } = Astro.props;
+const { datos, datosActuales, archivosHistorico, archivoActual } = Astro.props;
+console.log({ datos, datosActuales, archivosHistorico, archivoActual });
+
 const { resultados, generadoEn, totalRegiones } = datos;
 const fecha = new Date(generadoEn).toLocaleString("es-PE", {
   timeZone: "America/Lima",
@@ -18,11 +21,11 @@ function formatOption(filename) {
   const match = filename.match(/porcentajes_(.+)\.json/);
   if (match) {
     let datePart = match[1];
-    let parts = datePart.split('T');
+    let parts = datePart.split("T");
     if (parts.length === 2) {
-      let timeParts = parts[1].split('-');
+      let timeParts = parts[1].split("-");
       // Reconstruct valid ISO string to parse. E.g. "2026-04-14T15:11:52Z"
-      let iso = `${parts[0]}T${timeParts.join(':')}Z`;
+      let iso = `${parts[0]}T${timeParts.join(":")}Z`;
       return new Date(iso).toLocaleString("es-PE", {
         timeZone: "America/Lima",
         dateStyle: "medium",
@@ -59,8 +62,8 @@ function formatOption(filename) {
       datos.resumenNacional && (
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group flex flex-col justify-between">
-            <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
             <div>
               <p class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-2">
                 Total Nacional Contabilizado
@@ -69,8 +72,24 @@ function formatOption(filename) {
                 <span class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">
                   {datos.resumenNacional.actasContabilizadas}%
                 </span>
+                {archivoActual !== "current" &&
+                  datosActuales?.resumenNacional && (
+                    <span
+                      class="comparar-data font-medium text-xs font-extra-bold text-green-700 dark:text-green-400 ml-2 shadow-sm bg-green-100 dark:bg-green-900/40 px-2 py-0.5 rounded border border-green-300 dark:border-green-700/50"
+                      style="display: none;"
+                    >
+                      ↑ +
+                      {(
+                        parseFloat(
+                          datosActuales.resumenNacional.actasContabilizadas,
+                        ) -
+                        parseFloat(datos.resumenNacional.actasContabilizadas)
+                      ).toFixed(3)}
+                      %
+                    </span>
+                  )}
               </div>
-              
+
               <div class="mt-4 mb-6">
                 <div class="h-2 w-full bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
                   <div
@@ -82,46 +101,112 @@ function formatOption(filename) {
             </div>
 
             <div class="z-10 relative mt-4 pt-4 border-t border-black/5 dark:border-white/5">
-                <label for="historialSelect" class="block font-mono text-[10px] uppercase text-slate-500 tracking-wider mb-2">Revisar reporte histórico:</label>
-                <select id="historialSelect" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-xs font-medium focus:ring-1 focus:ring-primary outline-none transition-colors dark:text-white shadow-sm cursor-pointer">
-                    <option value="current" selected={archivoActual === 'current'}>Último reporte (Actual)</option>
-                    {archivosHistorico.map(f => (
-                    <option value={f} selected={archivoActual === f}>{formatOption(f)}</option>
-                    ))}
-                </select>
+              <label
+                for="historialSelect"
+                class="block font-medium text-[10px] uppercase text-slate-500 tracking-wider mb-2"
+              >
+                Revisar reporte histórico:
+              </label>
+              <select
+                id="historialSelect"
+                class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-xs font-medium focus:ring-1 focus:ring-primary outline-none transition-colors dark:text-white shadow-sm cursor-pointer"
+              >
+                <option value="current" selected={archivoActual === "current"}>
+                  Último reporte (Actual)
+                </option>
+                {archivosHistorico.map((f) => (
+                  <option value={f} selected={archivoActual === f}>
+                    {formatOption(f)}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
           <div class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group">
-            <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <p class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-3">
-              Top 4 Candidatos (Votos Válidos)
-            </p>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div class="flex justify-between items-center mb-3">
+              <p class="font-medium text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase">
+                Top 4 Candidatos (Votos Válidos)
+              </p>
+            </div>
             <div class="space-y-3">
-              {datos.resumenNacional.top4Candidatos.map((c, i) => (
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-black/10 dark:bg-white/10 text-xs font-bold text-slate-700 dark:text-slate-300">
-                      {i + 1}
-                    </span>
-                    <span
-                      class="text-sm font-medium text-slate-800 dark:text-slate-200 capitalize leading-tight"
-                      style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"
-                      title={c.nombreCandidato}
-                    >
-                      {c.nombreCandidato.toLowerCase()}
-                    </span>
+              {datos.resumenNacional.top4Candidatos.map((c, i) => {
+                let matchCurrent = null;
+                if (
+                  archivoActual !== "current" &&
+                  datosActuales?.resumenNacional?.top4Candidatos
+                ) {
+                  matchCurrent =
+                    datosActuales.resumenNacional.top4Candidatos.find(
+                      (ac) => ac.nombreCandidato === c.nombreCandidato,
+                    );
+                }
+
+                let diffPct = 0;
+                let diffVotos = 0;
+                if (matchCurrent) {
+                  diffPct = (
+                    parseFloat(matchCurrent.porcentajeVotosValidos) -
+                    parseFloat(c.porcentajeVotosValidos)
+                  ).toFixed(3);
+                  diffVotos =
+                    matchCurrent.totalVotosValidos - c.totalVotosValidos;
+                }
+
+                return (
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <span class="flex items-center justify-center w-5 h-5 rounded-full bg-black/10 dark:bg-white/10 text-xs font-bold text-slate-700 dark:text-slate-300">
+                        {i + 1}
+                      </span>
+                      <span
+                        class="text-sm font-medium text-slate-800 dark:text-slate-200 capitalize leading-tight"
+                        style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"
+                        title={c.nombreCandidato}
+                      >
+                        {c.nombreCandidato.toLowerCase()}
+                      </span>
+                    </div>
+                    <div class="flex flex-col items-end">
+                      <span class="font-medium text-xs font-bold text-primary tabular-nums">
+                        {c.porcentajeVotosValidos}%
+                      </span>
+                      <span class="font-medium text-[9px] text-slate-600 dark:text-slate-500 tabular-nums tracking-tighter">
+                        {c.totalVotosValidos.toLocaleString("es-PE")} votos
+                      </span>
+                      {matchCurrent && (
+                        <div
+                          class="comparar-data flex flex-col items-end mt-1 p-1 px-1.5 bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded animate-fade-in origin-top"
+                          style="display: none;"
+                        >
+                          <span
+                            class={`font-medium text-[10px] font-bold tabular-nums ${diffPct > 0 ? "text-green-700 dark:text-green-400" : diffPct < 0 ? "text-red-700 dark:text-red-400" : "text-slate-600 dark:text-slate-400"}`}
+                          >
+                            {diffPct > 0 ? "↑ +" : diffPct < 0 ? "↓ " : ""}
+                            {diffPct !== 0 ? diffPct : "0"}%
+                          </span>
+                          <span
+                            class={`font-medium text-[9px] font-medium tabular-nums ${diffVotos > 0 ? "text-green-700 dark:text-green-500" : diffVotos < 0 ? "text-red-700 dark:text-red-500" : "text-slate-500 dark:text-slate-400"}`}
+                          >
+                            {diffVotos > 0 ? "+" : ""}
+                            {diffVotos.toLocaleString("es-PE")} votos
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div class="flex flex-col items-end">
-                    <span class="font-mono text-xs font-bold text-primary tabular-nums">
-                      {c.porcentajeVotosValidos}%
-                    </span>
-                    <span class="font-mono text-[9px] text-slate-600 dark:text-slate-500 tabular-nums tracking-tighter">
-                      {c.totalVotosValidos.toLocaleString("es-PE")} votos
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
+              {archivoActual !== "current" &&
+                datosActuales?.resumenNacional && (
+                  <button
+                    id="btnComparar"
+                    class="w-full mt-2 text-[10px] uppercase tracking-wide bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition-colors shadow focus:ring-2 focus:ring-blue-400 outline-none"
+                  >
+                    Comparar con Actual
+                  </button>
+                )}
             </div>
           </div>
         </div>
@@ -214,17 +299,38 @@ function formatOption(filename) {
 </div>
 
 <script>
-  // Handle select navigation
-  document.getElementById("historialSelect")?.addEventListener("change", (e) => {
-    const val = (e.target as HTMLSelectElement).value;
-    if (val === "current") {
-      window.location.href = "/resultados-region";
-    } else {
-      // Remove .json for the route
-      const name = val.replace('.json', '');
-      window.location.href = "/resultados-region/historico/" + name;
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const btn = target.closest("#btnComparar") as HTMLButtonElement | null;
+    
+    if (btn) {
+      let isShowing = false;
+      document.querySelectorAll<HTMLElement>(".comparar-data").forEach((el) => {
+        if (el.style.display === "none") {
+          el.style.display = ""; // Defaults back to tailwind css class display
+          isShowing = true;
+        } else {
+          el.style.display = "none";
+        }
+      });
+      
+      btn.textContent = isShowing ? "Ocultar comparación" : "Comparar con Actual";
     }
   });
+
+  // Handle select navigation
+  document
+    .getElementById("historialSelect")
+    ?.addEventListener("change", (e) => {
+      const val = (e.target as HTMLSelectElement).value;
+      if (val === "current") {
+        window.location.href = "/resultados-region";
+      } else {
+        // Remove .json for the route
+        const name = val.replace(".json", "");
+        window.location.href = "/resultados-region/historico/" + name;
+      }
+    });
 
   type SortDir = "asc" | "desc";
   type ColKey =
@@ -250,17 +356,17 @@ function formatOption(filename) {
 
   if (tbody) {
     headers.forEach((th) => {
-        th.addEventListener("click", () => {
+      th.addEventListener("click", () => {
         const col = th.dataset.col as ColKey;
         if (currentCol === col) {
-            currentDir = currentDir === "asc" ? "desc" : "asc";
+          currentDir = currentDir === "asc" ? "desc" : "asc";
         } else {
-            currentCol = col;
-            currentDir = col === "nombre" ? "asc" : "desc";
+          currentCol = col;
+          currentDir = col === "nombre" ? "asc" : "desc";
         }
         sortTable(col, currentDir);
         updateIcons(th, currentDir);
-        });
+      });
     });
   }
 
