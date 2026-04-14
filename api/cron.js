@@ -1,5 +1,5 @@
 export default async function handler(request, response) {
-  const authHeader = request.headers.authorization;
+  const authHeader = request.headers.authorization || (request.headers.get && request.headers.get('authorization')) || (request.headers.get && request.headers.get('Authorization'));
   if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return response.status(401).json({ error: 'Acceso no autorizado' });
   }
