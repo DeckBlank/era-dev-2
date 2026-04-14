@@ -1,227 +1,112 @@
 {
-  "generadoEn": "2026-04-14T09:17:00.318Z",
-  "resumenNacional": {
-    "actasContabilizadas": 72.382,
-    "top3Candidatos": [
-      {
-        "nombreCandidato": "KEIKO SOFIA FUJIMORI HIGUCHI",
-        "porcentajeVotosValidos": 16.934,
-        "totalVotosValidos": 2162590
-      },
-      {
-        "nombreCandidato": "RAFAEL BERNARDO LÓPEZ ALIAGA CAZORLA",
-        "porcentajeVotosValidos": 12.992,
-        "totalVotosValidos": 1659176
-      },
-      {
-        "nombreCandidato": "JORGE NIETO MONTESINOS",
-        "porcentajeVotosValidos": 11.985,
-        "totalVotosValidos": 1530598
-      }
-    ]
-  },
-  "totalRegiones": 25,
-  "errores": [],
-  "resultados": [
+  "generadoEn": "2026-04-14T10:59:48.671Z",
+  "resumenNacional": null,
+  "totalRegiones": 0,
+  "errores": [
     {
-      "ubigeo": "170000",
-      "nombre": "MOQUEGUA",
-      "actasContabilizadas": 545,
-      "porcentajeActasContabilizadas": 94.291,
-      "actasPendientes": 24,
-      "porcentajeActasPendientes": 4.152
-    },
-    {
-      "ubigeo": "240000",
-      "nombre": "CALLAO",
-      "actasContabilizadas": 2709,
-      "porcentajeActasContabilizadas": 93.478,
-      "actasPendientes": 158,
-      "porcentajeActasPendientes": 5.452
-    },
-    {
-      "ubigeo": "140000",
-      "nombre": "LIMA",
-      "actasContabilizadas": 26000,
-      "porcentajeActasContabilizadas": 88.898,
-      "actasPendientes": 2898,
-      "porcentajeActasPendientes": 9.909
-    },
-    {
-      "ubigeo": "040000",
-      "nombre": "AREQUIPA",
-      "actasContabilizadas": 3511,
-      "porcentajeActasContabilizadas": 83.298,
-      "actasPendientes": 674,
-      "porcentajeActasPendientes": 15.99
-    },
-    {
-      "ubigeo": "230000",
-      "nombre": "TUMBES",
-      "actasContabilizadas": 501,
-      "porcentajeActasContabilizadas": 79.272,
-      "actasPendientes": 131,
-      "porcentajeActasPendientes": 20.728
-    },
-    {
-      "ubigeo": "220000",
-      "nombre": "TACNA",
-      "actasContabilizadas": 816,
-      "porcentajeActasContabilizadas": 78.386,
-      "actasPendientes": 225,
-      "porcentajeActasPendientes": 21.614
-    },
-    {
-      "ubigeo": "180000",
-      "nombre": "PASCO",
-      "actasContabilizadas": 586,
-      "porcentajeActasContabilizadas": 73.067,
-      "actasPendientes": 184,
-      "porcentajeActasPendientes": 22.943
-    },
-    {
-      "ubigeo": "200000",
-      "nombre": "PUNO",
-      "actasContabilizadas": 2463,
-      "porcentajeActasContabilizadas": 72.505,
-      "actasPendientes": 900,
-      "porcentajeActasPendientes": 26.494
-    },
-    {
-      "ubigeo": "130000",
-      "nombre": "LAMBAYEQUE",
-      "actasContabilizadas": 2573,
-      "porcentajeActasContabilizadas": 71.671,
-      "actasPendientes": 971,
-      "porcentajeActasPendientes": 27.048
-    },
-    {
-      "ubigeo": "080000",
-      "nombre": "HUANCAVELICA",
-      "actasContabilizadas": 912,
-      "porcentajeActasContabilizadas": 71.642,
-      "actasPendientes": 344,
-      "porcentajeActasPendientes": 27.023
-    },
-    {
-      "ubigeo": "020000",
-      "nombre": "ÁNCASH",
-      "actasContabilizadas": 2465,
-      "porcentajeActasContabilizadas": 70.997,
-      "actasPendientes": 987,
-      "porcentajeActasPendientes": 28.427
-    },
-    {
-      "ubigeo": "110000",
-      "nombre": "JUNÍN",
-      "actasContabilizadas": 2588,
-      "porcentajeActasContabilizadas": 70.116,
-      "actasPendientes": 1092,
-      "porcentajeActasPendientes": 29.586
-    },
-    {
-      "ubigeo": "070000",
-      "nombre": "CUSCO",
-      "actasContabilizadas": 2785,
-      "porcentajeActasContabilizadas": 69.922,
-      "actasPendientes": 1182,
-      "porcentajeActasPendientes": 29.676
-    },
-    {
-      "ubigeo": "050000",
-      "nombre": "AYACUCHO",
-      "actasContabilizadas": 1322,
-      "porcentajeActasContabilizadas": 69.579,
-      "actasPendientes": 556,
-      "porcentajeActasPendientes": 29.263
-    },
-    {
-      "ubigeo": "090000",
-      "nombre": "HUÁNUCO",
-      "actasContabilizadas": 1572,
-      "porcentajeActasContabilizadas": 67.151,
-      "actasPendientes": 724,
-      "porcentajeActasPendientes": 30.927
-    },
-    {
-      "ubigeo": "030000",
-      "nombre": "APURÍMAC",
-      "actasContabilizadas": 869,
-      "porcentajeActasContabilizadas": 65.983,
-      "actasPendientes": 423,
-      "porcentajeActasPendientes": 32.119
-    },
-    {
-      "ubigeo": "150000",
-      "nombre": "LORETO",
-      "actasContabilizadas": 1722,
-      "porcentajeActasContabilizadas": 63.849,
-      "actasPendientes": 755,
-      "porcentajeActasPendientes": 27.994
-    },
-    {
-      "ubigeo": "120000",
-      "nombre": "LA LIBERTAD",
-      "actasContabilizadas": 3367,
-      "porcentajeActasContabilizadas": 63.504,
-      "actasPendientes": 1857,
-      "porcentajeActasPendientes": 35.025
-    },
-    {
-      "ubigeo": "100000",
-      "nombre": "ICA",
-      "actasContabilizadas": 1443,
-      "porcentajeActasContabilizadas": 59.067,
-      "actasPendientes": 1000,
-      "porcentajeActasPendientes": 40.933
-    },
-    {
-      "ubigeo": "190000",
-      "nombre": "PIURA",
-      "actasContabilizadas": 2911,
-      "porcentajeActasContabilizadas": 55.122,
-      "actasPendientes": 2302,
-      "porcentajeActasPendientes": 43.59
-    },
-    {
-      "ubigeo": "210000",
-      "nombre": "SAN MARTÍN",
-      "actasContabilizadas": 1385,
-      "porcentajeActasContabilizadas": 54.657,
-      "actasPendientes": 1149,
-      "porcentajeActasPendientes": 45.343
-    },
-    {
-      "ubigeo": "250000",
-      "nombre": "UCAYALI",
-      "actasContabilizadas": 842,
-      "porcentajeActasContabilizadas": 53.836,
-      "actasPendientes": 722,
-      "porcentajeActasPendientes": 46.164
-    },
-    {
-      "ubigeo": "010000",
       "nombre": "AMAZONAS",
-      "actasContabilizadas": 629,
-      "porcentajeActasContabilizadas": 49.218,
-      "actasPendientes": 633,
-      "porcentajeActasPendientes": 49.53
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
     },
     {
-      "ubigeo": "060000",
+      "nombre": "ÁNCASH",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "APURÍMAC",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "AREQUIPA",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "AYACUCHO",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
       "nombre": "CAJAMARCA",
-      "actasContabilizadas": 2084,
-      "porcentajeActasContabilizadas": 49.151,
-      "actasPendientes": 2116,
-      "porcentajeActasPendientes": 49.906
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
     },
     {
-      "ubigeo": "160000",
+      "nombre": "CALLAO",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "CUSCO",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "HUANCAVELICA",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "HUÁNUCO",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "ICA",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "JUNÍN",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "LA LIBERTAD",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "LAMBAYEQUE",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "LIMA",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "LORETO",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
       "nombre": "MADRE DE DIOS",
-      "actasContabilizadas": 233,
-      "porcentajeActasContabilizadas": 45.957,
-      "actasPendientes": 274,
-      "porcentajeActasPendientes": 54.043
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "MOQUEGUA",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "PASCO",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "PIURA",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "PUNO",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "SAN MARTÍN",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "TACNA",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "TUMBES",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "UCAYALI",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
+    },
+    {
+      "nombre": "Nacional",
+      "error": "Unexpected token '<', \"<!doctype \"... is not valid JSON"
     }
-  ]
+  ],
+  "resultados": []
 }
