@@ -1,6 +1,7 @@
 import { writeFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { exit } from "process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -89,6 +90,7 @@ async function main() {
     }
 
     // Pequeña pausa para no saturar la API
+
     await new Promise((r) => setTimeout(r, 300));
   }
   async function fetchNacional() {
@@ -101,7 +103,7 @@ async function main() {
     ]);
 
     if (!resTotales.ok || !resParticipantes.ok) {
-       throw new Error("Error obteniendo datos nacionales");
+      throw new Error("Error obteniendo datos nacionales");
     }
 
     const { data: dataTotales } = await resTotales.json();
@@ -157,14 +159,14 @@ async function main() {
       // Format as YYYY-MM-DDTHH-mm to avoid colons in filenames
       const dateStr = date.toISOString().replace(/:/g, '-').split('.')[0];
       const path = `src/scripts/history/porcentajes_${dateStr}.json`;
-      
+
       const content = Buffer.from(JSON.stringify(jsonData, null, 2)).toString('base64');
-      
+
       console.log(`Subiendo histórico a GitHub: ${path}...`);
       const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `token ${token}`,
+          'Authorization': `Bearer ${token}`,
           'Accept': 'application/vnd.github.v3+json',
           'Content-Type': 'application/json'
         },
@@ -173,7 +175,7 @@ async function main() {
           content: content
         })
       });
-      
+
       if (res.ok) {
         console.log(`Histórico guardado en GitHub exitosamente: ${path}`);
       } else {
@@ -187,7 +189,7 @@ async function main() {
 
   writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegion.json"), JSON.stringify(output, null, 2), "utf-8");
   console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
-  
+
   await pushToGitHub(output);
 
   if (errores.length > 0) {
