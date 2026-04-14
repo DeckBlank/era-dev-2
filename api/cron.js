@@ -1,4 +1,9 @@
 export default async function handler(request, response) {
+  const authHeader = request.headers.authorization;
+  if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return response.status(401).json({ error: 'Acceso no autorizado' });
+  }
+
   const deployHookUrl = process.env.VERCEL_DEPLOY_HOOK_URL;
   
   if (!deployHookUrl) {
