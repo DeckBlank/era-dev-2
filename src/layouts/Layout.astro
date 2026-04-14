@@ -19,20 +19,23 @@ const {
   <head>
     <script is:inline>
       const theme = (() => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
         }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        return 'light';
+        // if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        //   return 'dark';
+        // }
+        return "light";
       })();
-      if (theme === 'light') {
-        document.documentElement.classList.remove('dark');
+      if (theme === "light") {
+        document.documentElement.classList.remove("dark");
       } else {
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.add("dark");
       }
-      window.localStorage.setItem('theme', theme);
+      window.localStorage.setItem("theme", theme);
     </script>
     <meta charset="utf-8" />
     <meta
@@ -80,11 +83,18 @@ const {
           >
         </a>
         <div class="flex items-center gap-4">
-          <button id="themeToggle" class="hover:text-primary transition-colors cursor-pointer" aria-label="Toggle Theme">
-            <span class="material-symbols-outlined text-lg" id="themeIcon">light_mode</span>
+          <button
+            id="themeToggle"
+            class="hover:text-primary transition-colors cursor-pointer"
+            aria-label="Toggle Theme"
+          >
+            <span class="material-symbols-outlined text-lg" id="themeIcon"
+              >light_mode</span
+            >
           </button>
           <div class="animate-pulse">
-            <span class="h-1.5 w-1.5 rounded-full bg-primary inline-block"></span>
+            <span class="h-1.5 w-1.5 rounded-full bg-primary inline-block"
+            ></span>
           </div>
         </div>
       </div>
@@ -135,10 +145,12 @@ const {
     localStorage.setItem("theme", isDark ? "dark" : "light");
     const icon = document.getElementById("themeIcon");
     if (icon) icon.innerText = isDark ? "light_mode" : "dark_mode";
-  }
-  
-  document.getElementById("themeToggle")?.addEventListener("click", handleToggleClick);
-  
+  };
+
+  document
+    .getElementById("themeToggle")
+    ?.addEventListener("click", handleToggleClick);
+
   // Update icon on load
   const updateIcon = () => {
     const isDark = document.documentElement.classList.contains("dark");
@@ -147,5 +159,5 @@ const {
   };
   updateIcon();
   // Listen for view transitions
-  document.addEventListener('astro:after-swap', updateIcon);
+  document.addEventListener("astro:after-swap", updateIcon);
 </script>
