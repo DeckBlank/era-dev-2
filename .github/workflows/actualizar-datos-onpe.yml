@@ -39,5 +39,5 @@ jobs:
             echo "Sin cambios"
           else
             git commit -m "chore: actualizar datos ONPE $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push origin master
+            git push origin master --force-with-lease
           fi
