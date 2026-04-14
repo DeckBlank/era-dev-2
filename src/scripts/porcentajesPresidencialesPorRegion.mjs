@@ -91,6 +91,47 @@ async function main() {
     // Pequeña pausa para no saturar la API
     await new Promise((r) => setTimeout(r, 300));
   }
+  async function fetchNacional() {
+    const urlTotales = 'https://resultadoelectoral.onpe.gob.pe/presentacion-backend/resumen-general/totales?idEleccion=10&tipoFiltro=eleccion';
+    const urlParticipantes = 'https://resultadoelectoral.onpe.gob.pe/presentacion-backend/resumen-general/participantes?idEleccion=10&tipoFiltro=eleccion';
+
+    const [resTotales, resParticipantes] = await Promise.all([
+      fetch(urlTotales, { headers: HEADERS }),
+      fetch(urlParticipantes, { headers: HEADERS })
+    ]);
+
+    if (!resTotales.ok || !resParticipantes.ok) {
+       throw new Error("Error obteniendo datos nacionales");
+    }
+
+    const { data: dataTotales } = await resTotales.json();
+    const { data: dataParticipantes } = await resParticipantes.json();
+
+    // Top 3 candidatos por porcentaje de votos validos
+    const top3Candidatos = dataParticipantes
+      .sort((a, b) => b.porcentajeVotosValidos - a.porcentajeVotosValidos)
+      .slice(0, 3)
+      .map(c => ({
+        nombreCandidato: c.nombreCandidato,
+        porcentajeVotosValidos: c.porcentajeVotosValidos,
+        totalVotosValidos: c.totalVotosValidos
+      }));
+
+    return {
+      actasContabilizadas: dataTotales.actasContabilizadas, // porcentaje
+      top3Candidatos
+    };
+  }
+
+  let resumenNacional = null;
+  try {
+    process.stdout.write(`Consultando Resumen Nacional ... `);
+    resumenNacional = await fetchNacional();
+    console.log(`OK`);
+  } catch (err) {
+    console.log(`ERROR: ${err.message}`);
+    errores.push({ nombre: "Nacional", error: err.message });
+  }
 
   // Ordenar de mayor a menor % contabilizado
   resultados.sort(
@@ -99,6 +140,7 @@ async function main() {
 
   const output = {
     generadoEn: new Date().toISOString(),
+    resumenNacional,
     totalRegiones: resultados.length,
     errores,
     resultados,
@@ -111,5 +153,6 @@ async function main() {
     console.log(`Errores (${errores.length}):`, errores);
   }
 }
+
 
 main().catch(console.error);

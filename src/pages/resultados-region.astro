@@ -10,7 +10,7 @@ const fecha = new Date(generadoEn).toLocaleString('es-PE', {
 });
 
 const top3 = resultados.slice(0, 3)
-  .map(r => `${r.nombre} ${r.porcentajeActasContabilizadas.toFixed(1)}%`)
+  .map(r => `${r.nombre} ${r.porcentajeActasContabilizadas}%`)
   .join(' · ');
 const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${top3}. Actualizado: ${fecha} (Lima).`;
 ---
@@ -22,14 +22,58 @@ const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${t
 >
   <div class="space-y-8 animate-fade-in">
 
-    <section class="space-y-2">
-      <p class="font-mono text-xs tracking-widest text-primary/60 uppercase">Elecciones 2026 // Presidencial</p>
-      <h1 class="text-2xl font-extrabold text-white tracking-tighter">
-        Actas por Región
-      </h1>
-      <p class="font-mono text-[10px] text-slate-500">
-        {totalRegiones} regiones · Actualizado: {fecha} (Lima)
-      </p>
+    <section class="space-y-4">
+      <div>
+        <p class="font-mono text-xs tracking-widest text-primary/60 uppercase">Elecciones 2026 // Presidencial</p>
+        <h1 class="text-2xl font-extrabold text-white tracking-tighter">
+          Resultados Nacionales y Regiones
+        </h1>
+        <p class="text-xs font-medium text-slate-400 mt-2 tracking-wide">
+          {totalRegiones} regiones · Última actualización: {fecha} (Lima)
+        </p>
+      </div>
+
+      <!-- Resumen Nacional -->
+      {datos.resumenNacional && (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <div class="bg-white/[0.02] border border-white/5 rounded-xl p-5 shadow-2xl backdrop-blur-md relative overflow-hidden group">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <p class="font-mono text-[10px] tracking-widest text-slate-400 uppercase mb-2">Total Nacional Contabilizado</p>
+            <div class="flex items-baseline gap-2">
+              <span class="text-4xl font-black text-white tracking-tighter">{datos.resumenNacional.actasContabilizadas}%</span>
+            </div>
+            
+            <div class="mt-4">
+               <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full transition-all duration-1000 ease-out" style={`width: ${datos.resumenNacional.actasContabilizadas}%`}></div>
+               </div>
+            </div>
+          </div>
+
+          <div class="bg-white/[0.02] border border-white/5 rounded-xl p-5 shadow-2xl backdrop-blur-md relative overflow-hidden group">
+             <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+             <p class="font-mono text-[10px] tracking-widest text-slate-400 uppercase mb-3">Top 3 Candidatos (Votos Válidos)</p>
+             <div class="space-y-3">
+               {datos.resumenNacional.top3Candidatos.map((c, i) => (
+                 <div class="flex items-center justify-between">
+                   <div class="flex items-center gap-3">
+                     <span class="flex items-center justify-center w-5 h-5 rounded-full bg-white/10 text-[10px] font-bold text-slate-300">{i + 1}</span>
+                     <span class="text-sm font-medium text-slate-200 capitalize leading-tight" style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;" title={c.nombreCandidato}>
+                        {c.nombreCandidato.toLowerCase()}
+                     </span>
+                   </div>
+                   <div class="flex flex-col items-end">
+                     <span class="font-mono text-xs font-bold text-primary tabular-nums">{c.porcentajeVotosValidos}%</span>
+                     <span class="font-mono text-[9px] text-slate-500 tabular-nums tracking-tighter">{c.totalVotosValidos.toLocaleString('es-PE')} votos</span>
+                   </div>
+                 </div>
+               ))}
+             </div>
+          </div>
+
+        </div>
+      )}
     </section>
 
     <div class="overflow-x-auto rounded-lg border border-white/5">
@@ -74,12 +118,13 @@ const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${t
                     />
                   </div>
                   <span class="font-mono text-xs text-slate-300 w-12 text-right shrink-0">
-                    {r.porcentajeActasContabilizadas.toFixed(1)}%
+                    {r.porcentajeActasContabilizadas}%
                   </span>
                 </div>
               </td>
               <td class="px-4 py-3 text-right font-mono text-slate-400">{r.actasPendientes.toLocaleString()}</td>
-              <td class="px-4 py-3 text-right font-mono text-slate-500">{r.porcentajeActasPendientes.toFixed(1)}%</td>
+              <td class="px-4 py-3 text-right font-mono text-slate-500">{r.porcentajeActasPendientes}%</td>
+
             </tr>
           ))}
         </tbody>
