@@ -83,16 +83,16 @@ const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${t
             <th data-col="nombre" class="th-sort px-4 py-3 text-left font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
               Región <span class="sort-icon ml-1 opacity-40">↕</span>
             </th>
-            <th data-col="actasContabilizadas" class="th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+            <th data-col="actasContabilizadas" class="hidden sm:table-cell th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
               Actas ✓ <span class="sort-icon ml-1 opacity-40">↕</span>
             </th>
             <th data-col="porcentajeActasContabilizadas" class="th-sort px-4 py-3 text-left font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
               % Contabilizadas <span class="sort-icon ml-1 opacity-40">↕</span>
             </th>
-            <th data-col="actasPendientes" class="th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+            <th data-col="actasPendientes" class="hidden sm:table-cell th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
               Actas ✗ <span class="sort-icon ml-1 opacity-40">↕</span>
             </th>
-            <th data-col="porcentajeActasPendientes" class="th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
+            <th data-col="porcentajeActasPendientes" class="hidden sm:table-cell th-sort px-4 py-3 text-right font-mono text-[10px] tracking-widest text-primary/70 uppercase cursor-pointer select-none hover:text-primary transition-colors whitespace-nowrap">
               % Pendientes <span class="sort-icon ml-1 opacity-40">↕</span>
             </th>
           </tr>
@@ -108,7 +108,7 @@ const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${t
               data-pct-pendientes={r.porcentajeActasPendientes}
             >
               <td class="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">{r.nombre}</td>
-              <td class="px-4 py-3 text-right font-mono text-slate-400">{r.actasContabilizadas.toLocaleString()}</td>
+              <td class="hidden sm:table-cell px-4 py-3 text-right font-mono text-slate-400">{r.actasContabilizadas.toLocaleString()}</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3 min-w-[160px]">
                   <div class="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
@@ -122,8 +122,8 @@ const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${t
                   </span>
                 </div>
               </td>
-              <td class="px-4 py-3 text-right font-mono text-slate-400">{r.actasPendientes.toLocaleString()}</td>
-              <td class="px-4 py-3 text-right font-mono text-slate-500">{r.porcentajeActasPendientes}%</td>
+              <td class="hidden sm:table-cell px-4 py-3 text-right font-mono text-slate-400">{r.actasPendientes.toLocaleString()}</td>
+              <td class="hidden sm:table-cell px-4 py-3 text-right font-mono text-slate-500">{r.porcentajeActasPendientes}%</td>
 
             </tr>
           ))}
