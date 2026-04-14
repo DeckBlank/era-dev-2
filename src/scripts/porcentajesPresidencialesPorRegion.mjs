@@ -107,10 +107,10 @@ async function main() {
     const { data: dataTotales } = await resTotales.json();
     const { data: dataParticipantes } = await resParticipantes.json();
 
-    // Top 3 candidatos por porcentaje de votos validos
-    const top3Candidatos = dataParticipantes
+    // Top 4 candidatos por porcentaje de votos validos
+    const top4Candidatos = dataParticipantes
       .sort((a, b) => b.porcentajeVotosValidos - a.porcentajeVotosValidos)
-      .slice(0, 3)
+      .slice(0, 4)
       .map(c => ({
         nombreCandidato: c.nombreCandidato,
         porcentajeVotosValidos: c.porcentajeVotosValidos,
@@ -119,7 +119,7 @@ async function main() {
 
     return {
       actasContabilizadas: dataTotales.actasContabilizadas, // porcentaje
-      top3Candidatos
+      top4Candidatos
     };
   }
 
