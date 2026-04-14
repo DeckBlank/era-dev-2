@@ -1,0 +1,27 @@
+body {
+    background-color: #0a0a0a;
+    min-height: 100dvh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.text-glow {
+    text-shadow: 0 0 15px rgba(19, 91, 236, 0.4);
+}
+
+.glow-sphere {
+    background: radial-gradient(circle, rgba(19, 91, 236, 0.08) 0%, rgba(10, 10, 10, 0) 70%);
+}
+
+.grain-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC3ktutUithvll6vuJtdVpjf8g36W8uTrepe8dVWC0bDHVQsyKPkjEFFEHSd8oqo2KismJmahE-9bOZtM1Z5Nk3t8UxM2T_18x3FUIK6k8XkR3A-kQO3yogcLFZbEbHpvaWbYHC9OhhVamdMW_tI337xGgyTi-BHSNy7jjkjDwjgybyvptS-GFqplkPIyNgqoOnTGNx_CyRXvcI5e2hJBfcByy4Fj4bUP2HvzdMwXqZckBY5cesD4-Oo6RvH_zEy6EJSKRBl5j-HWnM);
+    opacity: 0.02;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
