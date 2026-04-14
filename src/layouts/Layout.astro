@@ -15,8 +15,25 @@ const {
 ---
 
 <!doctype html>
-<html class="dark" lang="es">
+<html lang="es">
   <head>
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+      window.localStorage.setItem('theme', theme);
+    </script>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -43,13 +60,13 @@ const {
     />
   </head>
   <body
-    class="bg-background-dark text-slate-400 font-display selection:bg-primary/30 antialiased"
+    class="bg-white dark:bg-background-dark text-slate-800 dark:text-slate-400 font-display selection:bg-primary/30 antialiased"
   >
     <div class="fixed inset-0 grain-bg pointer-events-none z-50"></div>
     <div class="fixed inset-0 glow-sphere pointer-events-none"></div>
 
     <header
-      class="fixed top-0 w-full z-40 bg-background-dark/40 backdrop-blur-sm"
+      class="fixed top-0 w-full z-40 bg-white/80 dark:bg-background-dark/40 backdrop-blur-sm shadow-sm dark:shadow-none transition-colors"
     >
       <div class="flex items-center justify-between p-6 max-w-3xl mx-auto">
         <a
@@ -62,8 +79,13 @@ const {
           <span class="font-mono text-[10px] tracking-[0.2em]">ERADEV2_LOG</span
           >
         </a>
-        <div class="animate-pulse">
-          <span class="h-1.5 w-1.5 rounded-full bg-primary inline-block"></span>
+        <div class="flex items-center gap-4">
+          <button id="themeToggle" class="hover:text-primary transition-colors cursor-pointer" aria-label="Toggle Theme">
+            <span class="material-symbols-outlined text-lg" id="themeIcon">light_mode</span>
+          </button>
+          <div class="animate-pulse">
+            <span class="h-1.5 w-1.5 rounded-full bg-primary inline-block"></span>
+          </div>
         </div>
       </div>
     </header>
@@ -104,3 +126,26 @@ const {
     </footer>
   </body>
 </html>
+
+<script>
+  const handleToggleClick = () => {
+    const element = document.documentElement;
+    element.classList.toggle("dark");
+    const isDark = element.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    const icon = document.getElementById("themeIcon");
+    if (icon) icon.innerText = isDark ? "light_mode" : "dark_mode";
+  }
+  
+  document.getElementById("themeToggle")?.addEventListener("click", handleToggleClick);
+  
+  // Update icon on load
+  const updateIcon = () => {
+    const isDark = document.documentElement.classList.contains("dark");
+    const icon = document.getElementById("themeIcon");
+    if (icon) icon.innerText = isDark ? "light_mode" : "dark_mode";
+  };
+  updateIcon();
+  // Listen for view transitions
+  document.addEventListener('astro:after-swap', updateIcon);
+</script>
