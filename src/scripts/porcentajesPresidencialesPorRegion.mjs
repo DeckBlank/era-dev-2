@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { writeFileSync, existsSync, readdirSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { exit } from "process";
@@ -153,6 +153,35 @@ async function main() {
     if (!token) return;
 
     try {
+      const historyDir = join(__dirname, "history");
+      let lastPushTime = 0;
+
+      if (existsSync(historyDir)) {
+        const files = readdirSync(historyDir).filter((f) => f.endsWith(".json"));
+        if (files.length > 0) {
+          files.sort().reverse();
+          const lastFile = files[0];
+          const match = lastFile.match(/porcentajes_(.+)\.json/);
+          if (match) {
+            const datePart = match[1];
+            const parts = datePart.split("T");
+            if (parts.length === 2) {
+              const timeParts = parts[1].split("-");
+              const iso = `${parts[0]}T${timeParts.join(":")}Z`;
+              lastPushTime = new Date(iso).getTime();
+            }
+          }
+        }
+      }
+
+      const now = new Date(jsonData.generadoEn).getTime();
+      const minutesPassed = (now - lastPushTime) / (1000 * 60);
+
+      if (minutesPassed < 10) {
+        console.log(`⏱️ Pasaron solo ${minutesPassed.toFixed(1)} min desde el último histórico. Omitiendo push a GitHub para romper el bucle.`);
+        return;
+      }
+
       const owner = 'DeckBlank';
       const repo = 'era-dev-2';
       const date = new Date(jsonData.generadoEn);
@@ -171,7 +200,7 @@ async function main() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          message: `Oog guardar histórico de resultados ${dateStr} [skip ci]`,
+          message: `Oog guardar histórico de resultados ${dateStr}`,
           content: content
         })
       });
