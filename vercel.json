@@ -1,5 +1,6 @@
 {
   "framework": "astro",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "ignoreCommand": "if echo \"$VERCEL_GIT_COMMIT_MESSAGE\" | grep -q \"\\[skip ci\\]\"; then exit 0; else exit 1; fi"
 }

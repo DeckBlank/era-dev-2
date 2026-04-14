@@ -1,0 +1,73 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ResultadosUI from "../../../components/ResultadosUI.astro";
+import fs from "node:fs";
+import path from "node:path";
+
+export async function getStaticPaths() {
+  const historyDir = path.join(process.cwd(), "src/scripts/history");
+  if (!fs.existsSync(historyDir)) {
+    return [];
+  }
+  
+  const files = fs.readdirSync(historyDir).filter(f => f.endsWith(".json"));
+  
+  // Sort descending by date (assuming name formatting follows date)
+  files.sort().reverse();
+
+  return files.map((filename) => {
+    return {
+      params: { archivo: filename.replace('.json', '') },
+      props: { 
+        filename: filename,
+        archivosHistorico: files
+      },
+    };
+  });
+}
+
+const { filename, archivosHistorico } = Astro.props;
+
+// Load the JSON directly via FS reading
+import { readFileSync } from "node:fs";
+const historyDir = path.join(process.cwd(), "src/scripts/history");
+const filePath = path.join(historyDir, filename);
+
+let datos;
+try {
+  const content = readFileSync(filePath, "utf-8");
+  datos = JSON.parse(content);
+} catch (e) {
+  datos = {
+    resultados: [],
+    generadoEn: new Date().toISOString(),
+    totalRegiones: 0,
+    resumenNacional: { actasContabilizadas: 0, top4Candidatos: [] }
+  };
+}
+
+const { resultados, generadoEn } = datos;
+const fecha = new Date(generadoEn).toLocaleString("es-PE", {
+  timeZone: "America/Lima",
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
+const top4 = resultados
+  .slice(0, 4)
+  .map((r) => `${r.nombre} ${r.porcentajeActasContabilizadas}%`)
+  .join(" · ");
+const ogDescription = `Elecciones 2026 Histórico — Actas por región. ${top4}. Actualizado: ${fecha} (Lima).`;
+---
+
+<Layout
+  title={`Histórico: ${fecha} - Elecciones 2026`}
+  description={ogDescription}
+  url={`https://www.eradev2.com/resultados-region/historico/${filename.replace('.json', '')}`}
+>
+  <ResultadosUI 
+    datos={datos} 
+    archivosHistorico={archivosHistorico} 
+    archivoActual={filename} 
+  />
+</Layout>
