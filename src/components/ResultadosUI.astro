@@ -7,6 +7,11 @@ export interface Props {
 const { datos, archivosHistorico } = Astro.props;
 
 const { resultados, generadoEn, totalRegiones } = datos;
+const EXTRAPOLATION_PERCENT = 7.5;
+const targetPct = Math.min(
+  parseFloat(datos.resumenNacional.actasContabilizadas) + EXTRAPOLATION_PERCENT,
+  100,
+);
 const fecha = new Date(generadoEn).toLocaleString("es-PE", {
   timeZone: "America/Lima",
   dateStyle: "medium",
@@ -127,7 +132,7 @@ function formatOption(filename) {
                       {i + 1}
                     </span>
                     <span
-                      class="text-sm font-medium text-slate-800 dark:text-slate-200 capitalize leading-tight"
+                      class="text-sm font-bold text-slate-800 dark:text-slate-200 capitalize leading-tight"
                       style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"
                       title={c.nombreCandidato}
                     >
@@ -255,7 +260,7 @@ function formatOption(filename) {
       <span
         class="text-[10px] font-mono uppercase tracking-widest text-slate-400 bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded"
       >
-        Regresión lineal
+        Regresión ponderada (→{targetPct}%)
       </span>
     </div>
     <p class="text-xs text-slate-500 dark:text-slate-400 -mt-2">
@@ -303,7 +308,7 @@ function formatOption(filename) {
           <p
             class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4"
           >
-            Proyección al 100% de actas
+            Proyección al {targetPct}% de actas contabilizadas
           </p>
           <div id="proyeccionCandidatos" class="space-y-4"></div>
         </div>
@@ -342,9 +347,11 @@ function formatOption(filename) {
   define:vars={{
     datosActualesJSON: JSON.stringify(datos),
     archivosHistoricoJSON: JSON.stringify(archivosHistorico),
+    _EXTRAPOLATION_PERCENT: EXTRAPOLATION_PERCENT,
   }}
 >
   window.__datosActuales = JSON.parse(datosActualesJSON);
+  window.__EXTRAPOLATION_PERCENT = _EXTRAPOLATION_PERCENT;
   window.__archivosHistorico = JSON.parse(archivosHistoricoJSON);
 </script>
 
@@ -630,34 +637,43 @@ function formatOption(filename) {
     actualVotos: number;
   }
 
-  function linearRegression(points: { x: number; y: number }[]) {
+  /**
+   * Regresión lineal ponderada (Weighted Least Squares).
+   * Cada punto lleva un peso `w` que indica su importancia relativa.
+   * Puntos con mayor w influyen más en la pendiente e intercepto.
+   */
+  function linearRegression(points: { x: number; y: number; w: number }[]) {
     const n = points.length;
     if (n < 2) return null;
 
-    let sumX = 0,
-      sumY = 0,
-      sumXY = 0,
-      sumX2 = 0;
+    // Sumas ponderadas
+    let W = 0,
+      sumWX = 0,
+      sumWY = 0,
+      sumWXY = 0,
+      sumWX2 = 0;
     for (const p of points) {
-      sumX += p.x;
-      sumY += p.y;
-      sumXY += p.x * p.y;
-      sumX2 += p.x * p.x;
+      const w = p.w;
+      W += w;
+      sumWX += w * p.x;
+      sumWY += w * p.y;
+      sumWXY += w * p.x * p.y;
+      sumWX2 += w * p.x * p.x;
     }
 
-    const denom = n * sumX2 - sumX * sumX;
+    const denom = W * sumWX2 - sumWX * sumWX;
     if (Math.abs(denom) < 1e-10) return null;
 
-    const slope = (n * sumXY - sumX * sumY) / denom;
-    const intercept = (sumY - slope * sumX) / n;
+    const slope = (W * sumWXY - sumWX * sumWY) / denom;
+    const intercept = (sumWY - slope * sumWX) / W;
 
-    // R²
-    const meanY = sumY / n;
+    // R² ponderado
+    const meanYW = sumWY / W;
     let ssTot = 0,
       ssRes = 0;
     for (const p of points) {
-      ssTot += (p.y - meanY) ** 2;
-      ssRes += (p.y - (slope * p.x + intercept)) ** 2;
+      ssTot += p.w * (p.y - meanYW) ** 2;
+      ssRes += p.w * (p.y - (slope * p.x + intercept)) ** 2;
     }
     const r2 = ssTot > 0 ? 1 - ssRes / ssTot : 0;
 
@@ -748,14 +764,36 @@ function formatOption(filename) {
           (a: DataPoint, b: DataPoint) => a.actasPct - b.actasPct,
         );
 
-        const points = timeline.puntos.map((p: DataPoint) => ({
-          x: p.actasPct,
-          y: p.candidatoPct,
-        }));
+        // Calcular pesos: combina confiabilidad (más actas = más fiable)
+        // con recencia temporal (snapshot más reciente = más relevante)
+        const timestamps = timeline.puntos.map((p: DataPoint) => p.timestamp);
+        const minTs = Math.min(...timestamps);
+        const maxTs = Math.max(...timestamps);
+        const tsRange = maxTs - minTs || 1; // evitar /0
+
+        const points = timeline.puntos.map((p: DataPoint) => {
+          // Factor de confiabilidad: (actasPct/100)² — cuadrático para
+          // penalizar más fuerte los datos con pocas actas
+          const reliability = (p.actasPct / 100) ** 2;
+
+          // Factor de recencia: escala lineal de 0.3 (más antiguo) a 1.0 (más reciente)
+          const recency = 0.3 + 0.7 * ((p.timestamp - minTs) / tsRange);
+
+          return {
+            x: p.actasPct,
+            y: p.candidatoPct,
+            w: reliability * recency,
+          };
+        });
         const reg = linearRegression(points);
         if (!reg) continue;
-
-        const proyectado = reg.slope * 100 + reg.intercept;
+        // Extrapolar solo N% más allá del conteo actual (reduce error vs extrapolar a 100%)
+        const actasPctActual = parseFloat(
+          datosActuales.resumenNacional.actasContabilizadas,
+        );
+        const extrapPct = (window as any).__EXTRAPOLATION_PERCENT ?? 5;
+        const targetX = Math.min(actasPctActual + extrapPct, 100);
+        const proyectado = reg.slope * targetX + reg.intercept;
 
         let tendencia = "estable";
         if (reg.slope > 0.005) tendencia = "subiendo";
@@ -842,7 +880,7 @@ function formatOption(filename) {
                 <span class="flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-br ${color} text-white text-[10px] font-bold shadow-sm">
                   ${p.rankProyectado}
                 </span>
-                <span class="text-sm font-medium text-slate-800 dark:text-slate-200 capitalize leading-tight" style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
+                <span class="text-sm font-bold text-slate-800 dark:text-slate-200 capitalize leading-tight" style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
                   ${p.nombre.toLowerCase()}
                 </span>
                 ${rankBadge}
@@ -893,8 +931,9 @@ function formatOption(filename) {
         </div>
         <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5">
           <p class="text-[10px] text-slate-400 leading-relaxed">
-            <strong>Método:</strong> Regresión lineal mínimos cuadrados sobre 
+            <strong>Método:</strong> Regresión lineal ponderada (WLS) sobre 
             <code class="bg-black/5 dark:bg-white/5 px-1 rounded text-[9px]">%actas → %votos</code>. 
+            Más peso a datos recientes y con mayor cobertura de actas.
             <strong>R²</strong> indica el ajuste de la tendencia (1.0 = perfecto).
           </p>
           <p class="text-[10px] text-slate-400 leading-relaxed mt-2">
