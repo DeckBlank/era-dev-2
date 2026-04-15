@@ -1,0 +1,232 @@
+{
+  "generadoEn": "2026-04-15T06:30:20.939Z",
+  "resumenNacional": {
+    "actasContabilizadas": 87.017,
+    "top4Candidatos": [
+      {
+        "nombreCandidato": "KEIKO SOFIA FUJIMORI HIGUCHI",
+        "porcentajeVotosValidos": 16.863,
+        "totalVotosValidos": 2503608
+      },
+      {
+        "nombreCandidato": "RAFAEL BERNARDO LÓPEZ ALIAGA CAZORLA",
+        "porcentajeVotosValidos": 12.067,
+        "totalVotosValidos": 1791606
+      },
+      {
+        "nombreCandidato": "ROBERTO HELBERT SANCHEZ PALOMINO",
+        "porcentajeVotosValidos": 11.734,
+        "totalVotosValidos": 1742136
+      },
+      {
+        "nombreCandidato": "JORGE NIETO MONTESINOS",
+        "porcentajeVotosValidos": 11.234,
+        "totalVotosValidos": 1667885
+      }
+    ]
+  },
+  "totalRegiones": 25,
+  "errores": [],
+  "resultados": [
+    {
+      "ubigeo": "040000",
+      "nombre": "AREQUIPA",
+      "actasContabilizadas": 4047,
+      "porcentajeActasContabilizadas": 96.014,
+      "actasPendientes": 99,
+      "porcentajeActasPendientes": 2.349
+    },
+    {
+      "ubigeo": "200000",
+      "nombre": "PUNO",
+      "actasContabilizadas": 3249,
+      "porcentajeActasContabilizadas": 95.643,
+      "actasPendientes": 74,
+      "porcentajeActasPendientes": 2.179
+    },
+    {
+      "ubigeo": "240000",
+      "nombre": "CALLAO",
+      "actasContabilizadas": 2754,
+      "porcentajeActasContabilizadas": 95.031,
+      "actasPendientes": 30,
+      "porcentajeActasPendientes": 1.035
+    },
+    {
+      "ubigeo": "170000",
+      "nombre": "MOQUEGUA",
+      "actasContabilizadas": 549,
+      "porcentajeActasContabilizadas": 94.983,
+      "actasPendientes": 16,
+      "porcentajeActasPendientes": 2.768
+    },
+    {
+      "ubigeo": "080000",
+      "nombre": "HUANCAVELICA",
+      "actasContabilizadas": 1208,
+      "porcentajeActasContabilizadas": 94.894,
+      "actasPendientes": 20,
+      "porcentajeActasPendientes": 1.571
+    },
+    {
+      "ubigeo": "220000",
+      "nombre": "TACNA",
+      "actasContabilizadas": 986,
+      "porcentajeActasContabilizadas": 94.717,
+      "actasPendientes": 7,
+      "porcentajeActasPendientes": 0.672
+    },
+    {
+      "ubigeo": "050000",
+      "nombre": "AYACUCHO",
+      "actasContabilizadas": 1780,
+      "porcentajeActasContabilizadas": 93.684,
+      "actasPendientes": 28,
+      "porcentajeActasPendientes": 1.474
+    },
+    {
+      "ubigeo": "110000",
+      "nombre": "JUNÍN",
+      "actasContabilizadas": 3429,
+      "porcentajeActasContabilizadas": 92.902,
+      "actasPendientes": 140,
+      "porcentajeActasPendientes": 3.793
+    },
+    {
+      "ubigeo": "130000",
+      "nombre": "LAMBAYEQUE",
+      "actasContabilizadas": 3333,
+      "porcentajeActasContabilizadas": 92.841,
+      "actasPendientes": 95,
+      "porcentajeActasPendientes": 2.646
+    },
+    {
+      "ubigeo": "180000",
+      "nombre": "PASCO",
+      "actasContabilizadas": 743,
+      "porcentajeActasContabilizadas": 92.643,
+      "actasPendientes": 16,
+      "porcentajeActasPendientes": 1.995
+    },
+    {
+      "ubigeo": "140000",
+      "nombre": "LIMA",
+      "actasContabilizadas": 26995,
+      "porcentajeActasContabilizadas": 92.3,
+      "actasPendientes": 1506,
+      "porcentajeActasPendientes": 5.149
+    },
+    {
+      "ubigeo": "030000",
+      "nombre": "APURÍMAC",
+      "actasContabilizadas": 1201,
+      "porcentajeActasContabilizadas": 91.192,
+      "actasPendientes": 74,
+      "porcentajeActasPendientes": 5.619
+    },
+    {
+      "ubigeo": "070000",
+      "nombre": "CUSCO",
+      "actasContabilizadas": 3631,
+      "porcentajeActasContabilizadas": 91.162,
+      "actasPendientes": 275,
+      "porcentajeActasPendientes": 6.905
+    },
+    {
+      "ubigeo": "230000",
+      "nombre": "TUMBES",
+      "actasContabilizadas": 573,
+      "porcentajeActasContabilizadas": 90.665,
+      "actasPendientes": 0,
+      "porcentajeActasPendientes": 0
+    },
+    {
+      "ubigeo": "120000",
+      "nombre": "LA LIBERTAD",
+      "actasContabilizadas": 4775,
+      "porcentajeActasContabilizadas": 90.06,
+      "actasPendientes": 196,
+      "porcentajeActasPendientes": 3.697
+    },
+    {
+      "ubigeo": "090000",
+      "nombre": "HUÁNUCO",
+      "actasContabilizadas": 2033,
+      "porcentajeActasContabilizadas": 86.843,
+      "actasPendientes": 152,
+      "porcentajeActasPendientes": 6.493
+    },
+    {
+      "ubigeo": "020000",
+      "nombre": "ÁNCASH",
+      "actasContabilizadas": 2993,
+      "porcentajeActasContabilizadas": 86.204,
+      "actasPendientes": 290,
+      "porcentajeActasPendientes": 8.352
+    },
+    {
+      "ubigeo": "060000",
+      "nombre": "CAJAMARCA",
+      "actasContabilizadas": 3509,
+      "porcentajeActasContabilizadas": 82.759,
+      "actasPendientes": 536,
+      "porcentajeActasPendientes": 12.642
+    },
+    {
+      "ubigeo": "210000",
+      "nombre": "SAN MARTÍN",
+      "actasContabilizadas": 2065,
+      "porcentajeActasContabilizadas": 81.492,
+      "actasPendientes": 365,
+      "porcentajeActasPendientes": 14.404
+    },
+    {
+      "ubigeo": "150000",
+      "nombre": "LORETO",
+      "actasContabilizadas": 2086,
+      "porcentajeActasContabilizadas": 77.345,
+      "actasPendientes": 286,
+      "porcentajeActasPendientes": 10.605
+    },
+    {
+      "ubigeo": "250000",
+      "nombre": "UCAYALI",
+      "actasContabilizadas": 1204,
+      "porcentajeActasContabilizadas": 76.982,
+      "actasPendientes": 208,
+      "porcentajeActasPendientes": 13.299
+    },
+    {
+      "ubigeo": "010000",
+      "nombre": "AMAZONAS",
+      "actasContabilizadas": 974,
+      "porcentajeActasContabilizadas": 76.213,
+      "actasPendientes": 253,
+      "porcentajeActasPendientes": 19.796
+    },
+    {
+      "ubigeo": "190000",
+      "nombre": "PIURA",
+      "actasContabilizadas": 3832,
+      "porcentajeActasContabilizadas": 72.562,
+      "actasPendientes": 1218,
+      "porcentajeActasPendientes": 23.064
+    },
+    {
+      "ubigeo": "100000",
+      "nombre": "ICA",
+      "actasContabilizadas": 1692,
+      "porcentajeActasContabilizadas": 69.259,
+      "actasPendientes": 635,
+      "porcentajeActasPendientes": 25.993
+    },
+    {
+      "ubigeo": "160000",
+      "nombre": "MADRE DE DIOS",
+      "actasContabilizadas": 336,
+      "porcentajeActasContabilizadas": 66.272,
+      "actasPendientes": 151,
+      "porcentajeActasPendientes": 29.783
+    }
+  ]
+}
