@@ -134,7 +134,15 @@ function formatOption(filename) {
                       style="max-width: 180px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"
                       title={c.nombreCandidato}
                     >
-                      {c.nombreCandidato.toLowerCase()}
+                      {c.nombreCandidato.toLowerCase().split(" ").length > 3
+                        ? c.nombreCandidato.toLowerCase().split(" ")[0] +
+                          " " +
+                          // c.nombreCandidato.toLowerCase().split(" ")[1] +
+                          c.nombreCandidato.toLowerCase().split(" ")[2] +
+                          " " +
+                          c.nombreCandidato.toLowerCase().split(" ")[3] +
+                          " "
+                        : c.nombreCandidato.toLowerCase()}
                     </span>
                   </div>
                   <div class="flex flex-col items-end">
@@ -144,6 +152,18 @@ function formatOption(filename) {
                     <span class="font-medium text-[9px] text-slate-600 dark:text-slate-500 tabular-nums tracking-tighter">
                       {c.totalVotosValidos.toLocaleString("es-PE")} votos
                     </span>
+                    {i > 0 && (
+                      <span
+                        class="font-bold text-[9px] text-amber-700 dark:text-amber-400 px-1.5 py-0.5 mt-0.5 tabular-nums tracking-tighter"
+                        title={`Votos para alcanzar a ${datos.resumenNacional.top4Candidatos[i - 1].nombreCandidato}`}
+                      >
+                        {(
+                          datos.resumenNacional.top4Candidatos[i - 1]
+                            .totalVotosValidos - c.totalVotosValidos
+                        ).toLocaleString("es-PE")}{" "}
+                        para ↑
+                      </span>
+                    )}
                     <div
                       class="comparar-data candidato-diff flex flex-col items-end mt-1 p-1 px-1.5 bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 rounded animate-fade-in origin-top"
                       style="display: none;"
@@ -492,28 +512,23 @@ function formatOption(filename) {
           cActual.totalVotosValidos - cHistorico.totalVotosValidos;
         const numPct = parseFloat(diffPct);
 
-        const pctColor =
+        const bgColor =
           numPct > 0
-            ? "text-green-700 dark:text-green-400"
+            ? "bg-green-100 dark:bg-green-900/40 border-green-300 dark:border-green-700/50 text-green-700 dark:text-green-400"
             : numPct < 0
-              ? "text-red-700 dark:text-red-400"
-              : "text-slate-600 dark:text-slate-400";
+              ? "bg-red-100 dark:bg-red-900/40 border-red-300 dark:border-red-700/50 text-red-700 dark:text-red-400"
+              : "bg-slate-100 dark:bg-slate-900/40 border-slate-300 dark:border-slate-700/50 text-slate-600 dark:text-slate-400";
 
-        const votosColor =
-          diffVotos > 0
-            ? "text-green-700 dark:text-green-500"
-            : diffVotos < 0
-              ? "text-red-700 dark:text-red-500"
-              : "text-slate-500 dark:text-slate-400";
+        diffEl.className = `comparar-data candidato-diff flex flex-col items-end mt-1.5 p-1 px-2 border rounded shadow-sm animate-fade-in origin-top ${bgColor}`;
 
         const pctArrow = numPct > 0 ? "↑ +" : numPct < 0 ? "↓ " : "";
         const votosPrefix = diffVotos > 0 ? "+" : "";
 
         diffEl.innerHTML = `
-          <span class="font-medium text-[10px] font-bold tabular-nums ${pctColor}">
+          <span class="font-bold text-[10px] tabular-nums leading-tight">
             ${pctArrow}${numPct !== 0 ? diffPct : "0"}%
           </span>
-          <span class="font-medium text-[9px] font-medium tabular-nums ${votosColor}">
+          <span class="text-[9px] font-medium tabular-nums opacity-90 leading-tight">
             ${votosPrefix}${diffVotos.toLocaleString("es-PE")} votos
           </span>
         `;
