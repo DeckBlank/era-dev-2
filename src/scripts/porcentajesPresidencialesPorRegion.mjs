@@ -178,7 +178,7 @@ async function main() {
       const now = new Date(jsonData.generadoEn).getTime();
       const minutesPassed = (now - lastPushTime) / (1000 * 60);
 
-      if (minutesPassed < 7) {
+      if (minutesPassed < 5) {
         console.log(`⏱️ Pasaron solo ${minutesPassed.toFixed(1)} min desde el último histórico. Omitiendo push a GitHub para romper el bucle.`);
         return;
       }
