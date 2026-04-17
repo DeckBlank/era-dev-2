@@ -74,12 +74,9 @@ async function fetchRegion(ubigeo, nombre) {
   if (!presidencial) throw new Error(`No se encontró "Presidencial" para ${nombre}`);
 
   return {
+    ...presidencial,
     ubigeo,
     nombre,
-    actasContabilizadas: presidencial.actasContabilizadas,
-    porcentajeActasContabilizadas: presidencial.porcentajeActasContabilizadas,
-    actasPendientes: presidencial.actasPendientes,
-    porcentajeActasPendientes: presidencial.porcentajeActasPendientes,
   };
 }
 
