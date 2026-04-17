@@ -6,7 +6,7 @@ export interface Props {
 
 const { datos, archivosHistorico } = Astro.props;
 
-const { resultados, generadoEn, totalRegiones } = datos;
+const { resultados, generadoEn, totalRegiones, resultadosExtranjero } = datos;
 const EXTRAPOLATION_DEFAULT = 7.5;
 const actasPctActual = parseFloat(datos.resumenNacional.actasContabilizadas);
 const maxExtrap = Math.round((100 - actasPctActual) * 10) / 10;
@@ -56,7 +56,7 @@ function formatCandidateName(name) {
       <h1
         class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mt-1"
       >
-        Resultados Nacionales y Regiones
+        Resultados Totales
       </h1>
       <p
         class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 tracking-wide mb-6"
@@ -79,9 +79,9 @@ function formatCandidateName(name) {
       {
         datos.resumenNacional && (
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-            <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
+            {/* <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
               Resumen Nacional
-            </h2>
+            </h2> */}
             {resultados.filter((r) => r.actasPendientes === 0).length > 0 && (
               <div class="relative group/select">
                 <select class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs font-bold focus:ring-2 focus:ring-primary/50 outline-none transition-all dark:text-white shadow-sm cursor-pointer appearance-none max-w-[240px]">
@@ -579,6 +579,75 @@ function formatCandidateName(name) {
       )
     }
   </div>
+
+  {/* Tabla Extranjero */}
+  {resultadosExtranjero && resultadosExtranjero.length > 0 && (
+    <div class="col-span-12 overflow-x-auto rounded-2xl border border-black/5 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.01] backdrop-blur-sm">
+      <p class="font-mono text-[10px] tracking-widest text-slate-500 dark:text-slate-400 uppercase font-bold text-center py-6 border-b border-black/5 dark:border-white/5">
+        Conteo de Actas Extranjero
+      </p>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+            <th class="w-[1%] px-6 py-4 text-left font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              Continente
+            </th>
+            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              Total Actas
+            </th>
+            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              Contadas
+            </th>
+            <th class="w-[1%] px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              %
+            </th>
+            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              Pendientes JEE
+            </th>
+            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              %
+            </th>
+            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              Votos Válidos
+            </th>
+            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+              Part. %
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {resultadosExtranjero.map((r) => (
+            <tr class="border-b border-black/5 dark:border-white/5 hover:bg-primary/[0.03] transition-colors">
+              <td class="px-6 py-4 font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap capitalize">
+                {r.nombre.charAt(0) + r.nombre.slice(1).toLowerCase()}
+              </td>
+              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                {r.totalActas?.toLocaleString("es-PE") ?? "-"}
+              </td>
+              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                {r.actasContabilizadas?.toLocaleString("es-PE") ?? "-"}
+              </td>
+              <td class="px-6 py-4 text-right font-mono text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                {r.porcentajeActasContabilizadas}%
+              </td>
+              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                {r.actasPendientes?.toLocaleString("es-PE") ?? "-"}
+              </td>
+              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-500">
+                {r.porcentajeActasPendientes}%
+              </td>
+              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                {r.totalVotosValidos?.toLocaleString("es-PE") ?? "-"}
+              </td>
+              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                {r.participacionCiudadana ? `${r.participacionCiudadana}%` : "-"}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
 
   <!-- Proyección de resultados -->
   <section id="proyeccionSection" class="col-span-12 space-y-6 mt-4">

@@ -35,6 +35,14 @@ const ubigeoProvincia = [
   { ubigeo: "250000", nombre: "UCAYALI" },
 ];
 
+const ubigeoExtranjero = [
+  { ubigeo: "910000", nombre: "ÁFRICA" },
+  { ubigeo: "920000", nombre: "AMÉRICA" },
+  { ubigeo: "930000", nombre: "ASIA" },
+  { ubigeo: "940000", nombre: "EUROPA" },
+  { ubigeo: "950000", nombre: "OCEANÍA" },
+];
+
 
 const HEADERS = {
   accept: "*/*",
@@ -72,6 +80,31 @@ async function fetchRegion(ubigeo, nombre) {
     porcentajeActasContabilizadas: presidencial.porcentajeActasContabilizadas,
     actasPendientes: presidencial.actasPendientes,
     porcentajeActasPendientes: presidencial.porcentajeActasPendientes,
+  };
+}
+
+async function fetchExtranjeroRegion(ubigeo, nombre) {
+  const idUbigeoDepartamento = parseInt(ubigeo, 10);
+  const url = `https://resultadoelectoral.onpe.gob.pe/presentacion-backend/resumen-general/totales?idEleccion=10&tipoFiltro=ubigeo_nivel_01&idAmbitoGeografico=2&idUbigeoDepartamento=${idUbigeoDepartamento}`;
+
+  const res = await fetch(url, { headers: HEADERS });
+  if (!res.ok) throw new Error(`HTTP ${res.status} para Extranjero/${nombre}`);
+
+  const json = await res.json();
+  if (!json.success) throw new Error(`API error Extranjero/${nombre}: ${json.message}`);
+
+  const d = json.data;
+  return {
+    ubigeo,
+    nombre,
+    actasContabilizadas: d.contabilizadas,
+    totalActas: d.totalActas,
+    porcentajeActasContabilizadas: d.actasContabilizadas, // ya es porcentaje
+    actasPendientes: d.pendientesJee,
+    porcentajeActasPendientes: d.actasPendientesJee,
+    totalVotosEmitidos: d.totalVotosEmitidos,
+    totalVotosValidos: d.totalVotosValidos,
+    participacionCiudadana: d.participacionCiudadana,
   };
 }
 
@@ -139,6 +172,21 @@ async function main() {
     errores.push({ nombre: "Nacional", error: err.message });
   }
 
+  // Extranjero
+  const resultadosExtranjero = [];
+  for (const region of ubigeoExtranjero) {
+    process.stdout.write(`Consultando Extranjero/${region.nombre.padEnd(10)} ... `);
+    try {
+      const dato = await fetchExtranjeroRegion(region.ubigeo, region.nombre);
+      resultadosExtranjero.push(dato);
+      console.log(`OK (${dato.porcentajeActasContabilizadas}% contabilizadas)`);
+    } catch (err) {
+      console.log(`ERROR: ${err.message}`);
+      errores.push({ nombre: `Extranjero/${region.nombre}`, error: err.message });
+    }
+    await new Promise((r) => setTimeout(r, 200));
+  }
+
   // Ordenar de mayor a menor % contabilizado
   resultados.sort(
     (a, b) => b.porcentajeActasContabilizadas - a.porcentajeActasContabilizadas
@@ -150,6 +198,7 @@ async function main() {
     totalRegiones: resultados.length,
     errores,
     resultados,
+    resultadosExtranjero,
   };
 
   async function pushToGitHub(jsonData) {
@@ -223,9 +272,9 @@ async function main() {
   if (process.env.ENV !== "local") {
     console.log(process.env.ENV);
 
-    // writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegion.json"), JSON.stringify(output, null, 2), "utf-8");
-    // console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
-    // await pushToGitHub(output);
+    writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegion.json"), JSON.stringify(output, null, 2), "utf-8");
+    console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
+    await pushToGitHub(output);
   } else {
     writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegionLocal.json"), JSON.stringify(output, null, 2), "utf-8");
     console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegionLocal.json (${resultados.length} regiones)`);

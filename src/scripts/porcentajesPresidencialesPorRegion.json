@@ -1,203 +1,203 @@
 {
-  "generadoEn": "2026-04-17T11:43:25.423Z",
+  "generadoEn": "2026-04-17T12:58:42.777Z",
   "resumenNacional": {
-    "actasContabilizadas": 93.23,
-    "contabilizadas": 86486,
+    "actasContabilizadas": 93.32,
+    "contabilizadas": 86569,
     "totalActas": 92766,
-    "participacionCiudadana": 69.047,
-    "actasEnviadasJee": 5.988,
-    "enviadasJee": 5555,
-    "actasPendientesJee": 0.782,
-    "pendientesJee": 725,
-    "fechaActualizacion": 1776425220406,
+    "participacionCiudadana": 69.106,
+    "actasEnviadasJee": 5.994,
+    "enviadasJee": 5560,
+    "actasPendientesJee": 0.686,
+    "pendientesJee": 637,
+    "fechaActualizacion": 1776429900432,
     "idUbigeoDepartamento": 140000,
     "idUbigeoProvincia": 140100,
     "idUbigeoDistrito": 140101,
     "idUbigeoDistritoElectoral": 15,
-    "totalVotosEmitidos": 18867305,
-    "totalVotosValidos": 15729059,
+    "totalVotosEmitidos": 18883408,
+    "totalVotosValidos": 15742125,
     "porcentajeVotosEmitidos": 100,
     "porcentajeVotosValidos": 100,
     "top4Candidatos": [
       {
         "nombreCandidato": "KEIKO SOFIA FUJIMORI HIGUCHI",
-        "porcentajeVotosValidos": 17.065,
-        "totalVotosValidos": 2684105
+        "porcentajeVotosValidos": 17.057,
+        "totalVotosValidos": 2685059
       },
       {
         "nombreCandidato": "ROBERTO HELBERT SANCHEZ PALOMINO",
-        "porcentajeVotosValidos": 11.982,
-        "totalVotosValidos": 1884660
+        "porcentajeVotosValidos": 12.006,
+        "totalVotosValidos": 1890058
       },
       {
         "nombreCandidato": "RAFAEL BERNARDO LÓPEZ ALIAGA CAZORLA",
-        "porcentajeVotosValidos": 11.927,
-        "totalVotosValidos": 1876043
+        "porcentajeVotosValidos": 11.919,
+        "totalVotosValidos": 1876237
       },
       {
         "nombreCandidato": "JORGE NIETO MONTESINOS",
-        "porcentajeVotosValidos": 11.071,
-        "totalVotosValidos": 1741296
+        "porcentajeVotosValidos": 11.063,
+        "totalVotosValidos": 1741576
       },
       {
         "nombreCandidato": "RICARDO PABLO BELMONT CASSINELLI",
-        "porcentajeVotosValidos": 10.156,
-        "totalVotosValidos": 1597488
+        "porcentajeVotosValidos": 10.167,
+        "totalVotosValidos": 1600443
       },
       {
         "nombreCandidato": "CARLOS GONSALO ALVAREZ LOAYZA",
-        "porcentajeVotosValidos": 7.891,
-        "totalVotosValidos": 1241197
+        "porcentajeVotosValidos": 7.886,
+        "totalVotosValidos": 1241368
       },
       {
         "nombreCandidato": "PABLO ALFONSO LOPEZ CHAU NAVA",
-        "porcentajeVotosValidos": 7.345,
-        "totalVotosValidos": 1155333
+        "porcentajeVotosValidos": 7.347,
+        "totalVotosValidos": 1156497
       },
       {
         "nombreCandidato": "MARIA SOLEDAD PEREZ TELLO",
-        "porcentajeVotosValidos": 3.433,
-        "totalVotosValidos": 540026
+        "porcentajeVotosValidos": 3.431,
+        "totalVotosValidos": 540130
       },
       {
         "nombreCandidato": "ALFONSO CARLOS ESPA Y GARCES-ALVEAR",
-        "porcentajeVotosValidos": 3.378,
-        "totalVotosValidos": 531254
+        "porcentajeVotosValidos": 3.376,
+        "totalVotosValidos": 531413
       },
       {
         "nombreCandidato": "LUIS FERNANDO OLIVERA VEGA",
         "porcentajeVotosValidos": 1.85,
-        "totalVotosValidos": 290968
+        "totalVotosValidos": 291193
       },
       {
         "nombreCandidato": "JOSE LEON LUNA GALVEZ",
         "porcentajeVotosValidos": 1.582,
-        "totalVotosValidos": 248849
+        "totalVotosValidos": 248978
       },
       {
         "nombreCandidato": "YONHY LESCANO ANCIETA",
         "porcentajeVotosValidos": 1.3,
-        "totalVotosValidos": 204511
+        "totalVotosValidos": 204698
       },
       {
         "nombreCandidato": "CESAR ACUÑA PERALTA",
-        "porcentajeVotosValidos": 1.131,
-        "totalVotosValidos": 177860
+        "porcentajeVotosValidos": 1.13,
+        "totalVotosValidos": 177913
       },
       {
         "nombreCandidato": "PITTER ENRIQUE VALDERRAMA PEÑA",
-        "porcentajeVotosValidos": 0.959,
-        "totalVotosValidos": 150821
+        "porcentajeVotosValidos": 0.958,
+        "totalVotosValidos": 150833
       },
       {
         "nombreCandidato": "GEORGE PATRICK FORSYTH SOMMER",
         "porcentajeVotosValidos": 0.897,
-        "totalVotosValidos": 141154
+        "totalVotosValidos": 141185
       },
       {
         "nombreCandidato": "HERBERT CALLER GUTIERREZ",
         "porcentajeVotosValidos": 0.86,
-        "totalVotosValidos": 135297
+        "totalVotosValidos": 135428
       },
       {
         "nombreCandidato": "MARIO ENRIQUE VIZCARRA CORNEJO",
         "porcentajeVotosValidos": 0.856,
-        "totalVotosValidos": 134718
+        "totalVotosValidos": 134768
       },
       {
         "nombreCandidato": "RONALD DARWIN ATENCIO SOTOMAYOR",
         "porcentajeVotosValidos": 0.841,
-        "totalVotosValidos": 132271
+        "totalVotosValidos": 132372
       },
       {
         "nombreCandidato": "ROSARIO DEL PILAR FERNANDEZ BAZAN",
-        "porcentajeVotosValidos": 0.751,
-        "totalVotosValidos": 118065
+        "porcentajeVotosValidos": 0.75,
+        "totalVotosValidos": 118088
       },
       {
         "nombreCandidato": "CHARLIE CARRASCO SALAZAR",
-        "porcentajeVotosValidos": 0.709,
-        "totalVotosValidos": 111530
+        "porcentajeVotosValidos": 0.71,
+        "totalVotosValidos": 111842
       },
       {
         "nombreCandidato": "VLADIMIR ROY CERRON ROJAS",
         "porcentajeVotosValidos": 0.596,
-        "totalVotosValidos": 93680
+        "totalVotosValidos": 93773
       },
       {
         "nombreCandidato": "MESIAS ANTONIO GUEVARA AMASIFUEN",
-        "porcentajeVotosValidos": 0.491,
-        "totalVotosValidos": 77154
+        "porcentajeVotosValidos": 0.49,
+        "totalVotosValidos": 77166
       },
       {
         "nombreCandidato": "ROBERTO ENRIQUE CHIABRA LEON",
         "porcentajeVotosValidos": 0.405,
-        "totalVotosValidos": 63696
+        "totalVotosValidos": 63705
       },
       {
         "nombreCandidato": "PAUL DAVIS JAIMES BLANCO",
         "porcentajeVotosValidos": 0.394,
-        "totalVotosValidos": 61909
+        "totalVotosValidos": 62033
       },
       {
         "nombreCandidato": "WOLFGANG MARIO GROZO COSTA",
-        "porcentajeVotosValidos": 0.381,
-        "totalVotosValidos": 59870
+        "porcentajeVotosValidos": 0.38,
+        "totalVotosValidos": 59892
       },
       {
         "nombreCandidato": "ALEX GONZALES CASTILLO",
         "porcentajeVotosValidos": 0.379,
-        "totalVotosValidos": 59592
+        "totalVotosValidos": 59638
       },
       {
         "nombreCandidato": "RAFAEL JORGE BELAUNDE LLOSA",
         "porcentajeVotosValidos": 0.243,
-        "totalVotosValidos": 38293
+        "totalVotosValidos": 38309
       },
       {
         "nombreCandidato": "JOSE DANIEL WILLIAMS ZAPATA",
         "porcentajeVotosValidos": 0.195,
-        "totalVotosValidos": 30660
+        "totalVotosValidos": 30667
       },
       {
         "nombreCandidato": "FRANCISCO ERNESTO DIEZ-CANSECO TÁVARA",
         "porcentajeVotosValidos": 0.187,
-        "totalVotosValidos": 29428
+        "totalVotosValidos": 29444
       },
       {
         "nombreCandidato": "FIORELLA GIANNINA MOLINELLI ARISTONDO",
         "porcentajeVotosValidos": 0.162,
-        "totalVotosValidos": 25466
+        "totalVotosValidos": 25474
       },
       {
         "nombreCandidato": "ALVARO GONZALO PAZ DE LA BARRA FREIGEIRO",
         "porcentajeVotosValidos": 0.138,
-        "totalVotosValidos": 21777
+        "totalVotosValidos": 21798
       },
       {
         "nombreCandidato": "ARMANDO JOAQUIN MASSE FERNANDEZ",
         "porcentajeVotosValidos": 0.129,
-        "totalVotosValidos": 20305
+        "totalVotosValidos": 20332
       },
       {
         "nombreCandidato": "ANTONIO ORTIZ VILLANO",
         "porcentajeVotosValidos": 0.104,
-        "totalVotosValidos": 16361
+        "totalVotosValidos": 16377
       },
       {
         "nombreCandidato": "WALTER GILMER CHIRINOS PURIZAGA",
         "porcentajeVotosValidos": 0.086,
-        "totalVotosValidos": 13589
+        "totalVotosValidos": 13602
       },
       {
         "nombreCandidato": "NAPOLEON BECERRA GARCIA",
         "porcentajeVotosValidos": 0.068,
-        "totalVotosValidos": 10714
+        "totalVotosValidos": 10716
       },
       {
         "nombreCandidato": "CARLOS ERNESTO JAICO CARRANZA",
         "porcentajeVotosValidos": 0.058,
-        "totalVotosValidos": 9119
+        "totalVotosValidos": 9120
       }
     ]
   },
@@ -403,6 +403,68 @@
       "porcentajeActasContabilizadas": 84.501,
       "actasPendientes": 17,
       "porcentajeActasPendientes": 0.631
+    }
+  ],
+  "resultadosExtranjero": [
+    {
+      "ubigeo": "910000",
+      "nombre": "ÁFRICA",
+      "actasContabilizadas": 5,
+      "totalActas": 6,
+      "porcentajeActasContabilizadas": 83.333,
+      "actasPendientes": 1,
+      "porcentajeActasPendientes": 16.667,
+      "totalVotosEmitidos": 71,
+      "totalVotosValidos": 63,
+      "participacionCiudadana": 17.884
+    },
+    {
+      "ubigeo": "920000",
+      "nombre": "AMÉRICA",
+      "actasContabilizadas": 1043,
+      "totalActas": 1570,
+      "porcentajeActasContabilizadas": 66.433,
+      "actasPendientes": 106,
+      "porcentajeActasPendientes": 6.752,
+      "totalVotosEmitidos": 147106,
+      "totalVotosValidos": 108695,
+      "participacionCiudadana": 19.415
+    },
+    {
+      "ubigeo": "930000",
+      "nombre": "ASIA",
+      "actasContabilizadas": 50,
+      "totalActas": 107,
+      "porcentajeActasContabilizadas": 46.729,
+      "actasPendientes": 57,
+      "porcentajeActasPendientes": 53.271,
+      "totalVotosEmitidos": 5145,
+      "totalVotosValidos": 4176,
+      "participacionCiudadana": 12.424
+    },
+    {
+      "ubigeo": "940000",
+      "nombre": "EUROPA",
+      "actasContabilizadas": 603,
+      "totalActas": 839,
+      "porcentajeActasContabilizadas": 71.871,
+      "actasPendientes": 67,
+      "porcentajeActasPendientes": 7.986,
+      "totalVotosEmitidos": 120588,
+      "totalVotosValidos": 97598,
+      "participacionCiudadana": 29.894
+    },
+    {
+      "ubigeo": "950000",
+      "nombre": "OCEANÍA",
+      "actasContabilizadas": 15,
+      "totalActas": 21,
+      "porcentajeActasContabilizadas": 71.429,
+      "actasPendientes": 4,
+      "porcentajeActasPendientes": 19.047,
+      "totalVotosEmitidos": 1694,
+      "totalVotosValidos": 1565,
+      "participacionCiudadana": 21.394
     }
   ]
 }
