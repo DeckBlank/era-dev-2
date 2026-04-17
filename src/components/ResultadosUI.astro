@@ -254,6 +254,140 @@ function formatCandidateName(name) {
       }
     </div>
 
+    <!-- Proyección de resultados -->
+    <section id="proyeccionSection" class="col-span-12 space-y-6 mt-4">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <h2
+            class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter"
+          >
+            Proyección Final
+          </h2>
+          <span
+            class="text-[9px] font-black uppercase tracking-[0.2em] text-violet-500 bg-violet-500/10 border border-violet-500/20 px-3 py-1 rounded-full"
+          >
+            Regresión ponderada
+          </span>
+        </div>
+
+        <div
+          class="flex items-center gap-4 bg-slate-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 rounded-2xl px-5 py-3 min-w-[320px] shadow-sm"
+        >
+          <span
+            class="text-[10px] font-black text-slate-400 tabular-nums uppercase tracking-tighter"
+            >Min +2%</span
+          >
+          <input
+            type="range"
+            id="extrapSpinner"
+            min="2"
+            max={maxExtrap}
+            step="0.5"
+            value={EXTRAPOLATION_DEFAULT}
+            class="extrap-slider flex-1 h-2 appearance-none bg-black/10 dark:bg-white/10 rounded-full cursor-pointer outline-none"
+          />
+          <span
+            class="text-[10px] font-black text-slate-400 tabular-nums uppercase tracking-tighter"
+            >Máx +{maxExtrap}%</span
+          >
+          <div
+            class="pl-4 border-l border-black/5 dark:border-white/10 flex flex-col items-end"
+          >
+            <span
+              class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5"
+              >Objetivo</span
+            >
+            <strong
+              id="targetPctLabel"
+              class="text-sm font-black text-primary tabular-nums"
+              >{Math.min(actasPctActual + EXTRAPOLATION_DEFAULT, 100)}%
+            </strong>
+          </div>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500 dark:text-slate-400 -mt-2">
+        Estimación basada en la tendencia histórica de cada candidato conforme
+        avanza el conteo de actas.
+      </p>
+
+      <div
+        id="proyeccionLoading"
+        class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-6 text-center"
+      >
+        <div class="inline-flex items-center gap-2 text-xs text-slate-500">
+          <svg
+            class="animate-spin h-4 w-4 text-primary"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Cargando datos históricos para proyección…
+        </div>
+      </div>
+
+      <div id="proyeccionContent" style="display: none;">
+        <div class="grid grid-cols-1 gap-4">
+          <div
+            class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group"
+          >
+            <div
+              class="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            >
+            </div>
+            <p
+              id="proyeccionSubtitle"
+              class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4"
+            >
+              Proyección al <span id="proyeccionTargetInline"
+                >{Math.min(actasPctActual + EXTRAPOLATION_DEFAULT, 100)}</span
+              >% de actas contabilizadas
+            </p>
+            <div id="proyeccionCandidatos" class="space-y-4"></div>
+            <div
+              class="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            >
+            </div>
+            <p
+              class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4"
+            >
+              Datos de la proyección
+            </p>
+            <div
+              id="proyeccionMeta"
+              class="space-y-2 text-xs text-slate-600 dark:text-slate-400"
+            >
+            </div>
+          </div>
+
+          <!-- <div
+            class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group"
+          >
+           
+          </div> -->
+        </div>
+      </div>
+
+      <div
+        id="proyeccionError"
+        style="display: none;"
+        class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30 rounded-xl p-4 text-xs text-red-700 dark:text-red-400"
+      >
+      </div>
+    </section>
+
     <!-- Resumen Nacional -->
     {
       datos.resumenNacional && (
@@ -581,206 +715,77 @@ function formatCandidateName(name) {
   </div>
 
   {/* Tabla Extranjero */}
-  {resultadosExtranjero && resultadosExtranjero.length > 0 && (
-    <div class="col-span-12 overflow-x-auto rounded-2xl border border-black/5 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.01] backdrop-blur-sm">
-      <p class="font-mono text-[10px] tracking-widest text-slate-500 dark:text-slate-400 uppercase font-bold text-center py-6 border-b border-black/5 dark:border-white/5">
-        Conteo de Actas Extranjero
-      </p>
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
-            <th class="w-[1%] px-6 py-4 text-left font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              Continente
-            </th>
-            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              Total Actas
-            </th>
-            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              Contadas
-            </th>
-            <th class="w-[1%] px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              %
-            </th>
-            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              Pendientes JEE
-            </th>
-            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              %
-            </th>
-            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              Votos Válidos
-            </th>
-            <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
-              Part. %
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {resultadosExtranjero.map((r) => (
-            <tr class="border-b border-black/5 dark:border-white/5 hover:bg-primary/[0.03] transition-colors">
-              <td class="px-6 py-4 font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap capitalize">
-                {r.nombre.charAt(0) + r.nombre.slice(1).toLowerCase()}
-              </td>
-              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
-                {r.totalActas?.toLocaleString("es-PE") ?? "-"}
-              </td>
-              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
-                {r.actasContabilizadas?.toLocaleString("es-PE") ?? "-"}
-              </td>
-              <td class="px-6 py-4 text-right font-mono text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                {r.porcentajeActasContabilizadas}%
-              </td>
-              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
-                {r.actasPendientes?.toLocaleString("es-PE") ?? "-"}
-              </td>
-              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-500">
-                {r.porcentajeActasPendientes}%
-              </td>
-              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
-                {r.totalVotosValidos?.toLocaleString("es-PE") ?? "-"}
-              </td>
-              <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
-                {r.participacionCiudadana ? `${r.participacionCiudadana}%` : "-"}
-              </td>
+  {
+    resultadosExtranjero && resultadosExtranjero.length > 0 && (
+      <div class="col-span-12 overflow-x-auto rounded-2xl border border-black/5 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.01] backdrop-blur-sm">
+        <p class="font-mono text-[10px] tracking-widest text-slate-500 dark:text-slate-400 uppercase font-bold text-center py-6 border-b border-black/5 dark:border-white/5">
+          Conteo de Actas Extranjero
+        </p>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+              <th class="w-[1%] px-6 py-4 text-left font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                Continente
+              </th>
+              <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                Total Actas
+              </th>
+              <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                Contadas
+              </th>
+              <th class="w-[1%] px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                %
+              </th>
+              <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                Pendientes JEE
+              </th>
+              <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                %
+              </th>
+              <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                Votos Válidos
+              </th>
+              <th class="w-[1%] hidden sm:table-cell px-6 py-4 text-right font-mono text-[10px] tracking-widest text-primary uppercase whitespace-nowrap font-bold">
+                Part. %
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )}
-
-  <!-- Proyección de resultados -->
-  <section id="proyeccionSection" class="col-span-12 space-y-6 mt-4">
-    <div class="flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <h2
-          class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter"
-        >
-          Proyección Final
-        </h2>
-        <span
-          class="text-[9px] font-black uppercase tracking-[0.2em] text-violet-500 bg-violet-500/10 border border-violet-500/20 px-3 py-1 rounded-full"
-        >
-          Regresión ponderada
-        </span>
+          </thead>
+          <tbody>
+            {resultadosExtranjero.map((r) => (
+              <tr class="border-b border-black/5 dark:border-white/5 hover:bg-primary/[0.03] transition-colors">
+                <td class="px-6 py-4 font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap capitalize">
+                  {r.nombre.charAt(0) + r.nombre.slice(1).toLowerCase()}
+                </td>
+                <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                  {r.totalActas?.toLocaleString("es-PE") ?? "-"}
+                </td>
+                <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                  {r.actasContabilizadas?.toLocaleString("es-PE") ?? "-"}
+                </td>
+                <td class="px-6 py-4 text-right font-mono text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                  {r.porcentajeActasContabilizadas}%
+                </td>
+                <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                  {r.actasPendientes?.toLocaleString("es-PE") ?? "-"}
+                </td>
+                <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-500">
+                  {r.porcentajeActasPendientes}%
+                </td>
+                <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                  {r.totalVotosValidos?.toLocaleString("es-PE") ?? "-"}
+                </td>
+                <td class="hidden sm:table-cell px-6 py-4 text-right font-mono text-xs text-slate-500 dark:text-slate-400">
+                  {r.participacionCiudadana
+                    ? `${r.participacionCiudadana}%`
+                    : "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
-      <div
-        class="flex items-center gap-4 bg-slate-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 rounded-2xl px-5 py-3 min-w-[320px] shadow-sm"
-      >
-        <span
-          class="text-[10px] font-black text-slate-400 tabular-nums uppercase tracking-tighter"
-          >Min +2%</span
-        >
-        <input
-          type="range"
-          id="extrapSpinner"
-          min="2"
-          max={maxExtrap}
-          step="0.5"
-          value={EXTRAPOLATION_DEFAULT}
-          class="extrap-slider flex-1 h-2 appearance-none bg-black/10 dark:bg-white/10 rounded-full cursor-pointer outline-none"
-        />
-        <span
-          class="text-[10px] font-black text-slate-400 tabular-nums uppercase tracking-tighter"
-          >Máx +{maxExtrap}%</span
-        >
-        <div
-          class="pl-4 border-l border-black/5 dark:border-white/10 flex flex-col items-end"
-        >
-          <span
-            class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5"
-            >Objetivo</span
-          >
-          <strong
-            id="targetPctLabel"
-            class="text-sm font-black text-primary tabular-nums"
-            >{Math.min(actasPctActual + EXTRAPOLATION_DEFAULT, 100)}%
-          </strong>
-        </div>
-      </div>
-    </div>
-    <p class="text-xs text-slate-500 dark:text-slate-400 -mt-2">
-      Estimación basada en la tendencia histórica de cada candidato conforme
-      avanza el conteo de actas.
-    </p>
-
-    <div
-      id="proyeccionLoading"
-      class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-6 text-center"
-    >
-      <div class="inline-flex items-center gap-2 text-xs text-slate-500">
-        <svg
-          class="animate-spin h-4 w-4 text-primary"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            class="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            stroke-width="4"></circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-        Cargando datos históricos para proyección…
-      </div>
-    </div>
-
-    <div id="proyeccionContent" style="display: none;">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div
-          class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group"
-        >
-          <div
-            class="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          >
-          </div>
-          <p
-            id="proyeccionSubtitle"
-            class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4"
-          >
-            Proyección al <span id="proyeccionTargetInline"
-              >{Math.min(actasPctActual + EXTRAPOLATION_DEFAULT, 100)}</span
-            >% de actas contabilizadas
-          </p>
-          <div id="proyeccionCandidatos" class="space-y-4"></div>
-        </div>
-
-        <div
-          class="bg-slate-50 dark:bg-white/[0.02] border border-black/5 dark:border-white/5 rounded-xl p-5 shadow-sm dark:shadow-2xl backdrop-blur-md relative overflow-hidden group"
-        >
-          <div
-            class="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          >
-          </div>
-          <p
-            class="font-mono text-xs tracking-widest text-slate-600 dark:text-slate-400 uppercase mb-4"
-          >
-            Datos de la proyección
-          </p>
-          <div
-            id="proyeccionMeta"
-            class="space-y-2 text-xs text-slate-600 dark:text-slate-400"
-          >
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      id="proyeccionError"
-      style="display: none;"
-      class="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30 rounded-xl p-4 text-xs text-red-700 dark:text-red-400"
-    >
-    </div>
-  </section>
+    )
+  }
 </div>
 
 <script
