@@ -10,7 +10,9 @@ let archivosHistorico = [];
 try {
   const historyDir = path.join(process.cwd(), "src/scripts/history");
   if (fs.existsSync(historyDir)) {
-    archivosHistorico = fs.readdirSync(historyDir).filter(f => f.endsWith(".json"));
+    archivosHistorico = fs
+      .readdirSync(historyDir)
+      .filter((f) => f.endsWith(".json"));
     archivosHistorico.sort().reverse(); // Show newest first
   }
 } catch (e) {
@@ -36,8 +38,5 @@ const ogDescription = `Elecciones 2026 — Actas presidenciales por región. ${t
   description={ogDescription}
   url="https://www.eradev2.com/resultados-region"
 >
-  <ResultadosUI 
-    datos={datos} 
-    archivosHistorico={archivosHistorico} 
-  />
+  <ResultadosUI datos={datos} archivosHistorico={archivosHistorico} />
 </Layout>

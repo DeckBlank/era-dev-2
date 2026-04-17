@@ -2,6 +2,8 @@ import { writeFileSync, existsSync, readdirSync, mkdirSync, copyFileSync } from 
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { exit } from "process";
+import dotenv from "dotenv";
+dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -113,7 +115,7 @@ async function main() {
     // Top 4 candidatos por porcentaje de votos validos
     const top4Candidatos = dataParticipantes
       .sort((a, b) => b.porcentajeVotosValidos - a.porcentajeVotosValidos)
-      .slice(0, 4)
+      // .slice(0, 4)
       .map(c => ({
         nombreCandidato: c.nombreCandidato,
         porcentajeVotosValidos: c.porcentajeVotosValidos,
@@ -121,7 +123,8 @@ async function main() {
       }));
 
     return {
-      actasContabilizadas: dataTotales.actasContabilizadas, // porcentaje
+      // actasContabilizadas: dataTotales.actasContabilizadas, // porcentaje
+      ...dataTotales,
       top4Candidatos
     };
   }
@@ -217,10 +220,16 @@ async function main() {
     }
   }
 
-  writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegion.json"), JSON.stringify(output, null, 2), "utf-8");
-  console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
+  if (process.env.ENV !== "local") {
+    console.log(process.env.ENV);
 
-  await pushToGitHub(output);
+    // writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegion.json"), JSON.stringify(output, null, 2), "utf-8");
+    // console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegion.json (${resultados.length} regiones)`);
+    // await pushToGitHub(output);
+  } else {
+    writeFileSync(join(__dirname, "porcentajesPresidencialesPorRegionLocal.json"), JSON.stringify(output, null, 2), "utf-8");
+    console.log(`\nArchivo guardado: porcentajesPresidencialesPorRegionLocal.json (${resultados.length} regiones)`);
+  }
 
   // Copy history files to public/history/ for client-side fetch access
   const historyDir = join(__dirname, "history");
