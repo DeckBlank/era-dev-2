@@ -105,6 +105,18 @@ async function fetchExtranjeroRegion(ubigeo, nombre) {
   };
 }
 
+async function fetchExtranjeroNacional() {
+  const url = `https://resultadoelectoral.onpe.gob.pe/presentacion-backend/resumen-general/totales?idEleccion=10&tipoFiltro=ambito_geografico&idAmbitoGeografico=2`;
+
+  const res = await fetch(url, { headers: HEADERS });
+  if (!res.ok) throw new Error(`HTTP ${res.status} para Extranjero Total`);
+
+  const json = await res.json();
+  if (!json.success) throw new Error(`API error Extranjero Total: ${json.message}`);
+
+  return json.data;
+}
+
 async function main() {
   const resultados = [];
   const errores = [];
@@ -184,6 +196,16 @@ async function main() {
     await new Promise((r) => setTimeout(r, 200));
   }
 
+  let resumenExtranjeroNacional = null;
+  try {
+    process.stdout.write(`Consultando Resumen Nacional Extranjero ... `);
+    resumenExtranjeroNacional = await fetchExtranjeroNacional();
+    console.log(`OK`);
+  } catch (err) {
+    console.log(`ERROR: ${err.message}`);
+    errores.push({ nombre: "ExtranjeroNacional", error: err.message });
+  }
+
   // Ordenar de mayor a menor % contabilizado
   resultados.sort(
     (a, b) => b.porcentajeActasContabilizadas - a.porcentajeActasContabilizadas
@@ -192,6 +214,7 @@ async function main() {
   const output = {
     generadoEn: new Date().toISOString(),
     resumenNacional,
+    resumenExtranjeroNacional,
     totalRegiones: resultados.length,
     errores,
     resultados,
